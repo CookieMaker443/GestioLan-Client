@@ -50,12 +50,6 @@ public class LoginController implements Observer{
             System.out.println("Username or Password is empty!");
             SceneManager.getInstance().showAlert(bundle.getString("login.Warning"), bundle.getString("login.MISSING_FIELDS"), AlertType.WARNING);
             
-            // DEBUG: accesso automatico per test
-            SceneManager.getInstance()
-                    .loadScene((Stage)loginButton.getScene().getWindow(), 
-                        SceneManager.SceneKeys.MAIN_MENU_VIEW, 
-                        bundle.getString("menu.TITLE"), 1536, 768); 
-            
             return;
         }
         // disabilita il bottone per evitare spam
@@ -86,7 +80,7 @@ public class LoginController implements Observer{
                 SceneManager.getInstance()
                     .loadScene((Stage)loginButton.getScene().getWindow(), 
                         SceneManager.SceneKeys.MAIN_MENU_VIEW, 
-                        bundle.getString("menu.TITLE"), 1024, 768);    
+                        bundle.getString("menu.TITLE"), 1500, 750);    
             } else if (state instanceof String errorKey){
                 // Qui state è una stringa di errore del bundle. 
                 SceneManager.getInstance().showAlert(bundle.getString("login.Error"), bundle.getString(errorKey), AlertType.ERROR);
