@@ -11,7 +11,7 @@ public class SessionManager extends Subject implements Observer{
 
     private SessionManager() {}
 
-    public static SessionManager getInstance() {
+    public static SessionManager getIstance() {
         if (instance == null) {
             instance = new SessionManager();
         }

@@ -40,7 +40,7 @@ public class LoginController implements Observer{
         System.out.println("LoginController inizializzato: collego i componenti...");
         
         // Colleghiamo la rete al SessionManager
-        userNetController.Attach(SessionManager.getInstance());
+        userNetController.Attach(SessionManager.getIstance());
     }
 
     @FXML
@@ -48,7 +48,7 @@ public class LoginController implements Observer{
     private void handleLoginButtonAction() throws IOException {
         if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
             System.out.println("Username or Password is empty!");
-            SceneManager.getInstance().showAlert(bundle.getString("login.Warning"), bundle.getString("login.MISSING_FIELDS"), AlertType.WARNING);
+            SceneManager.getIstance().showAlert(bundle.getString("login.Warning"), bundle.getString("login.MISSING_FIELDS"), AlertType.WARNING);
             
             return;
         }
@@ -61,7 +61,7 @@ public class LoginController implements Observer{
         System.out.println("Attempting login with Username: " + username);
 
         // appena  il SessionManager e pronto, chiama questo update()
-        SessionManager.getInstance().Attach(this);  
+        SessionManager.getIstance().Attach(this);  
 
         // passa la richiesta di login al UserNetController ed esegui il login
         userNetController.UserLogin(username, password); 
@@ -73,20 +73,20 @@ public class LoginController implements Observer{
         javafx.application.Platform.runLater(() -> {
             // Disabilitato l'ascolto per evitare doppie chiamate istantanee
             System.out.println("LoginController ha ricevuto Update dal SessionManager.");
-            SessionManager.getInstance().Detach(this);
+            SessionManager.getIstance().Detach(this);
             loginButton.setDisable(false);
 
             if (state instanceof user) {
-                SceneManager.getInstance()
+                SceneManager.getIstance()
                     .loadScene((Stage)loginButton.getScene().getWindow(), 
                         SceneManager.SceneKeys.MAIN_MENU_VIEW, 
                         bundle.getString("menu.TITLE"), 1500, 750);    
             } else if (state instanceof String errorKey){
                 // Qui state è una stringa di errore del bundle. 
-                SceneManager.getInstance().showAlert(bundle.getString("login.Error"), bundle.getString(errorKey), AlertType.ERROR);
+                SceneManager.getIstance().showAlert(bundle.getString("login.Error"), bundle.getString(errorKey), AlertType.ERROR);
             } else {
                 // Caso generico se state fosse null
-                SceneManager.getInstance().showAlert(bundle.getString("login.Error"), bundle.getString("login.CONNECTION_ERROR"), AlertType.ERROR);
+                SceneManager.getIstance().showAlert(bundle.getString("login.Error"), bundle.getString("login.CONNECTION_ERROR"), AlertType.ERROR);
             }
         });
     }
@@ -94,7 +94,7 @@ public class LoginController implements Observer{
     @FXML
     @SuppressWarnings("unused")
     private void handleChangeServerButton(ActionEvent event) throws IOException {
-        SceneManager.getInstance().loadPopupScene(event, SceneManager.SceneKeys.SERVER_CONFIG_POPUP, 
+        SceneManager.getIstance().loadPopupScene(event, SceneManager.SceneKeys.SERVER_CONFIG_POPUP, 
             bundle.getString("serverchange.title"), 500, 300);
     }
 }
