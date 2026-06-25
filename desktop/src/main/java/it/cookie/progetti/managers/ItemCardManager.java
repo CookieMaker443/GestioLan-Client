@@ -68,7 +68,7 @@ public class ItemCardManager implements Observer {
         }
         cardsContainer.getChildren().clear();
 
-        String cardPath = SceneManager.getIstance().getPath(SceneKeys.ITEM_CARD);
+        String cardPath = SceneManager.getInstance().getPath(SceneKeys.ITEM_CARD);
 
         for (Item item : items) {
             try {

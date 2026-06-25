@@ -41,7 +41,7 @@ public class SceneManager {
         }
     }
 
-    public static SceneManager getIstance() {
+    public static SceneManager getInstance() {
         if (istance == null) {
             istance = new SceneManager();
         }

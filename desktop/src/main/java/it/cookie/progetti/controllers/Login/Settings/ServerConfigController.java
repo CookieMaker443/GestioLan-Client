@@ -18,15 +18,15 @@ public class ServerConfigController {
     @FXML
     private void initialize() {
         // Hint: initialize() will be called when the associated FXML has been completely loaded.
-        ipField.setText(NetworkManager.GetIstance().getIP()); // Default value
-        portField.setText(Integer.toString(NetworkManager.GetIstance().getPort()));    // Default value
+        ipField.setText(NetworkManager.getInstance().getIP()); // Default value
+        portField.setText(Integer.toString(NetworkManager.getInstance().getPort()));    // Default value
     }
 
     @FXML
     private void handleConnectButton() {
         String ip = ipField.getText();
         int port = Integer.parseInt(portField.getText());
-        NetworkManager.GetIstance().saveConfig(ip, port);
+        NetworkManager.getInstance().saveConfig(ip, port);
     }
 
     

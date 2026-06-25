@@ -25,10 +25,10 @@ public class App extends Application
         final double MIN_WIDTH = 768;
         final double MIN_HEIGHT = 544;
 
-        SessionManager.getIstance().ClearSession();    // Pulisce la Sessione ad ogni avvio
+        SessionManager.getInstance().ClearSession();    // Pulisce la Sessione ad ogni avvio
         // LanguageManager.getInstance();               // Inizializza il LanguageManager
         // Inizializza lo SceneManager
-        SceneManager.getIstance()
+        SceneManager.getInstance()
                 .loadScene(primaryStage, SceneManager.SceneKeys.LOGIN_VIEW, 
                     bundle.getString("app.title"), MIN_WIDTH, MIN_HEIGHT);
     }

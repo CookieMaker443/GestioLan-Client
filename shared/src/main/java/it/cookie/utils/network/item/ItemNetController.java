@@ -38,7 +38,7 @@ public class ItemNetController extends Subject {
 
             // costruisce la richiesta
             // costruisce la query dell'url in base ai parametri passati
-            StringBuilder urlBuilder = new StringBuilder(NetworkManager.GetIstance().GetBaseURL() + "/api/Items?");
+            StringBuilder urlBuilder = new StringBuilder(NetworkManager.getInstance().GetBaseURL() + "/api/Items?");
             if(name != null && !name.isEmpty()) {
                 urlBuilder.append("name=").append(name).append("&");
             }
@@ -63,8 +63,8 @@ public class ItemNetController extends Subject {
 
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(urlBuilder.toString()))
-                .timeout(java.time.Duration.ofMillis(NetworkManager.GetIstance().getTimeout()))
-                .header("Authorization", "Bearer " + SessionManager.getIstance().getJWT())
+                .timeout(java.time.Duration.ofMillis(NetworkManager.getInstance().getTimeout()))
+                .header("Authorization", "Bearer " + SessionManager.getInstance().getJWT())
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
                 .header("User-Agent", "GestioLan D-Client")

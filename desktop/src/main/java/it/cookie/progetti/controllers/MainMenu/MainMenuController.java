@@ -9,7 +9,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.FlowPane;
 
 
 public class MainMenuController {
@@ -41,7 +41,7 @@ public class MainMenuController {
     private CheckBox useCategoryButton;
 
     @FXML
-    private Pane itemsFlowPane; // Contenitore per le card degli item ancora da includere nel FXML
+    private FlowPane itemsFlowPane; // Contenitore per le card degli item ancora da includere nel FXML
 
     // -----
 
@@ -49,7 +49,7 @@ public class MainMenuController {
     @FXML
     public void initialize() {
         ItemCardManager.getInstance().setContainer(itemsFlowPane);
-        handleRequestButton(null); // carica subito al primo accesso
+        //handleRequestButton(null); // carica subito al primo accesso
     }
 
     @FXML

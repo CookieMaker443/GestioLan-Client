@@ -26,7 +26,7 @@ public class NetworkManager {
         loadConfig();
     }
 
-    public static synchronized NetworkManager GetIstance() {
+    public static synchronized NetworkManager getInstance() {
         if(istance == null) {
             istance = new NetworkManager();
         }
@@ -68,6 +68,9 @@ public class NetworkManager {
     }
 
     public String GetBaseURL() {
+        /*if(port == null || port == 0) {
+            return HTTP + ip_addr;
+        }*/
         return HTTP + ip_addr + ":" + port;
     }
 
