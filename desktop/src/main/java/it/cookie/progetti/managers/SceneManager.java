@@ -27,7 +27,8 @@ public class SceneManager {
     public enum SceneKeys {
         LOGIN_VIEW("LoginView"),
         MAIN_MENU_VIEW("MainMenuView"),
-        SERVER_CONFIG_POPUP("ServerConfigView");
+        SERVER_CONFIG_POPUP("ServerConfigView"),
+        ITEM_CARD("ItemCard");
 
         private final String key;
 
@@ -49,6 +50,11 @@ public class SceneManager {
 
     private SceneManager() {
         InitializeSceneFile();
+    }
+
+    // Metodo per ottenere solo il path, senza caricare nulla
+    public String getPath(SceneKeys sceneKey) {
+        return FXML_SCENES.get(sceneKey.getKey());
     }
 
     private void InitializeSceneFile() {
