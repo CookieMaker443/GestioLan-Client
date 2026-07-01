@@ -51,6 +51,22 @@ public class NetworkManager {
         }
     }
 
+    public void saveConfig(String savePath, String newIp, int newPort) {
+        this.ip_addr = newIp;
+        this.port = newPort;
+        
+        // #TODO: Salvare in un file esterno
+        // di solito si usa un percorso nel filesystem (es. cartella utente)
+        try (OutputStream output = new FileOutputStream(savePath)) {
+            props.setProperty("server.ip", newIp);
+            props.setProperty("server.port", String.valueOf(newPort));
+            props.store(output, "Server Configuration");
+        } catch (IOException io) {
+            // o.printStackTrace();
+            System.out.println("Salvataggio configurazione non riuscita");
+        }
+    }
+
     // Carica i dati dal file
     private void loadConfig() {
         // getResourceAsStream - il file è dentro il JAR/Risorse
@@ -67,10 +83,31 @@ public class NetworkManager {
         }
     }
 
+    // Carica i dati dal file
+    private void loadConfig(String loadPath) {
+        try (InputStream input = new FileInputStream(loadPath)){
+            props.load(input);
+            this.ip_addr = props.getProperty("server.ip");
+            String portStr = props.getProperty("server.port");
+
+            if (portStr != null) {
+                this.port = Integer.parseInt(portStr);
+            } else {
+                this.port = 0; // non specificato
+            }
+            
+        } catch (IOException ex) {
+            // ex.printStackTrace();
+            System.out.println("Configurazione non trovata, uso valori di default");
+            this.ip_addr = "localhost";
+            this.port = 8080;
+        }
+    }
+
     public String GetBaseURL() {
-        /*if(port == null || port == 0) {
+        if(port == 0) {
             return HTTP + ip_addr;
-        }*/
+        }
         return HTTP + ip_addr + ":" + port;
     }
 
