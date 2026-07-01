@@ -48,6 +48,7 @@ public class SettingsManager {
 
     private SettingsManager() {
         load();
+        NetworkManager.getInstance().init(SETTINGS_FILE);
     }
 
     // Detect dell'os
@@ -124,7 +125,7 @@ public class SettingsManager {
     public int getServerPort() {
         return NetworkManager.getInstance().getPort();
     }
-    
+
 
     // HTTP VERSION
     public String getHttpVersion() {

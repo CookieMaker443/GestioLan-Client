@@ -12,6 +12,8 @@ public class NetworkManager {
     int port;
     int timeout = 2000; // in millisecondi
 
+    private boolean useHttps = true;
+
     public static NetworkManager istance;
 
     private final Properties props = new Properties();
@@ -22,8 +24,10 @@ public class NetworkManager {
     private final String FILE_NAME = "server.properties";
     private final String CONFIG_PATH = PATH_TO_RES + PATH + FILE_NAME;
 
-    private NetworkManager() {
-        loadConfig();
+    private NetworkManager() {}
+
+    public void init(String path) {
+        loadConfig(path);
     }
 
     public static synchronized NetworkManager getInstance() {
@@ -54,15 +58,29 @@ public class NetworkManager {
     public void saveConfig(String savePath, String newIp, int newPort) {
         this.ip_addr = newIp;
         this.port = newPort;
-        
-        // #TODO: Salvare in un file esterno
-        // di solito si usa un percorso nel filesystem (es. cartella utente)
+
+        Properties fileProps = new Properties();
+
+        // carica quello che c'è già nel file, per non perdere le altre chiavi
+        try (InputStream input = new FileInputStream(savePath)) {
+            fileProps.load(input);
+        } catch (IOException ignored) {
+            // file non esiste ancora: si parte da vuoto, va bene così
+        }
+
+        // aggiorna solo le chiavi di rete
+        fileProps.setProperty("server.ip", newIp);
+        if (newPort == 0) {
+            // porta non impostata -> non la scriviamo/la rimuoviamo, nessun errore
+            fileProps.remove("server.port");
+        } else {
+            fileProps.setProperty("server.port", String.valueOf(newPort));
+        }
+
+        // riscrivi tutto il file (vecchie chiavi + nuove)
         try (OutputStream output = new FileOutputStream(savePath)) {
-            props.setProperty("server.ip", newIp);
-            props.setProperty("server.port", String.valueOf(newPort));
-            props.store(output, "Server Configuration");
+            fileProps.store(output, "Server Configuration");
         } catch (IOException io) {
-            // o.printStackTrace();
             System.out.println("Salvataggio configurazione non riuscita");
         }
     }
@@ -85,30 +103,25 @@ public class NetworkManager {
 
     // Carica i dati dal file
     private void loadConfig(String loadPath) {
-        try (InputStream input = new FileInputStream(loadPath)){
-            props.load(input);
-            this.ip_addr = props.getProperty("server.ip");
-            String portStr = props.getProperty("server.port");
-
-            if (portStr != null) {
-                this.port = Integer.parseInt(portStr);
-            } else {
-                this.port = 0; // non specificato
-            }
-            
-        } catch (IOException ex) {
-            // ex.printStackTrace();
-            System.out.println("Configurazione non trovata, uso valori di default");
-            this.ip_addr = "localhost";
-            this.port = 8080;
-        }
+    try (InputStream input = new FileInputStream(loadPath)) {
+        props.load(input);
+        this.ip_addr = props.getProperty("server.ip");
+        String portStr = props.getProperty("server.port");
+        this.port = (portStr != null) ? Integer.parseInt(portStr) : 0;
+    } catch (IOException | NumberFormatException ex) {
+        // file assente o porta corrotta: nessun errore visibile, solo default
+        System.out.println("Configurazione non trovata, uso valori di default");
+        this.ip_addr = "localhost";
+        this.port = 0; // non 8080 forzato: coerente col "non impostata"
     }
+}
 
     public String GetBaseURL() {
-        if(port == 0) {
-            return HTTP + ip_addr;
+        String scheme = useHttps ? HTTPS : HTTP;
+        if (port == 0) {
+            return scheme + ip_addr;
         }
-        return HTTP + ip_addr + ":" + port;
+        return scheme + ip_addr + ":" + port;
     }
 
     public String getIP() { return ip_addr; }
@@ -118,4 +131,8 @@ public class NetworkManager {
     public int getTimeout() { return timeout; }
 
     public void setTimeout(int timeout) { this.timeout = timeout; }
+
+    public void setUseHttps(boolean useHttps) { this.useHttps = useHttps; }
+
+    public boolean isUseHttps() { return useHttps; }
 }
