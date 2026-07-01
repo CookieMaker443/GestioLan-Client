@@ -32,7 +32,7 @@ public class UserNetController extends Subject {
 
         // con un Builder, crea il pacchetto HttpRequest
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://" + NetworkManager.getInstance().getIP() + ":" + NetworkManager.getInstance().getPort() + "/api/Users/Login"))
+                .uri(URI.create(NetworkManager.getInstance().GetBaseURL() + "/api/Users/Login"))
                 .timeout(java.time.Duration.ofMillis(NetworkManager.getInstance().getTimeout())) // Se dopo X secondi non risponde, "uccidi" la richiesta
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
@@ -84,9 +84,6 @@ public class UserNetController extends Subject {
         try {
             // Trasforma la risposta JSON in oggetto user (Image non gestita qui    )
             user loggedUser = objectMapper.readValue(responseBody, user.class);
-            
-            // TODO: rimuovere questo JWT temporaneo
-            loggedUser.setJWT("temp_jwt_token");
 
             // Update() del SessionManager
             Notify(loggedUser);
