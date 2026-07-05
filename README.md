@@ -1,7 +1,6 @@
 ## GestioLAN per client desktop ##
 
-For the english version of this readme, check "README_EN.md"
-Software client del database "GestioLAN"
+For full documentation, check the `docs` directory
 
 ## Framework & Librerie utilizzate per lo sviluppo
 
@@ -38,3 +37,7 @@ ogni file FXML ha il corrispettico controller .java
 partendo dai rispettivi path, i file .java e .fxml seguono la stessa struttura gerarchica
 
 nel codice, per avere piu ordine e permettere una manutenzione migliore futura, per ottenere i file .fxml ho usato `scene.properties` per mappare il file .fxml al suo rispettivo percorso
+
+## Documentazione
+
+per la documentazione, ho creato un prompt che mi aiuta ad avere una documentazione dettagliata da degli llm, seguendo ttti un "pattern" comune, in questa maniera per la documentazione è possibile passare bozze di documentazioni scritte al volo, blocchi di codice e ottenere un file pulito e dettagliato
