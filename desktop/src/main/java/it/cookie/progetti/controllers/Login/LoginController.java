@@ -8,6 +8,7 @@ import it.cookie.progetti.managers.SceneManager;
 import it.cookie.utils.interfaces.observer.Observer;
 import it.cookie.utils.interfaces.observer.Subject;
 import it.cookie.utils.network.managers.SessionManager;
+import it.cookie.utils.network.user.MessageText;
 import it.cookie.utils.network.user.UserNetController;
 import it.cookie.utils.network.user.user;
 import javafx.event.ActionEvent;
@@ -81,13 +82,19 @@ public class LoginController implements Observer{
                     .loadScene((Stage)loginButton.getScene().getWindow(), 
                         SceneManager.SceneKeys.MAIN_MENU_VIEW, 
                         bundle.getString("menu.TITLE"), 1500, 750);    
-            } else if (state instanceof String errorKey){
-                // Qui state è una stringa di errore del bundle. 
-                SceneManager.getInstance().showAlert(bundle.getString("login.Error"), bundle.getString(errorKey), AlertType.ERROR);
+            } 
+            else if (state instanceof MessageText error) {
+                // errore noto -> traduci dal bundle; errore non previsto -> messaggio grezzo della JVM
+                String message = error.isKnown()
+                    ? bundle.getString(error.bundleKey())
+                    : error.rawMessage();
+                SceneManager.getInstance().showAlert(bundle.getString("login.Error"), message, AlertType.ERROR);
             } else {
-                // Caso generico se state fosse null
+                // rete di sicurezza: non dovrebbe mai capitare, dato che ogni percorso
+                // di errore in UserNetController passa da un LoginError
                 SceneManager.getInstance().showAlert(bundle.getString("login.Error"), bundle.getString("login.CONNECTION_ERROR"), AlertType.ERROR);
             }
+
         });
     }
 
