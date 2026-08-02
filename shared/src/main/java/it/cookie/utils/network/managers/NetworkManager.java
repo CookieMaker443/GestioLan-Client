@@ -12,7 +12,7 @@ public class NetworkManager {
     int port;
     int timeout = 2000; // in millisecondi
 
-    private boolean useHttps = true;
+    private boolean useHttps = false;
 
     public static NetworkManager istance;
 
