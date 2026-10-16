@@ -1,0 +1,1802 @@
+/* =====================================================================================
+   GestioLan - theme.css
+   Tema di base (CHIARO) + varianti (scuro, monocromo, monocromo scuro) per tutte le pagine FXML.
+
+   COME SI USA
+   - Caricare il file sulla Scene:  scene.getStylesheets().add(getClass().getResource("/css/theme.css").toExternalForm());
+   - Cambiare tema/font a runtime aggiungendo UNA classe sul root della Scene:
+         root.getStyleClass().setAll("theme-dark", "font-inter");     (nessuna classe = tema chiaro + IBM Plex Sans)
+   - Per creare un tema personalizzato basta ridefinire le variabili "-gl-*" qui sotto in un nuovo file .css
+     (vedi la sezione 1: ogni variabile ha scritto cosa colora).
+   - Sopra ogni proprietà c'è un piccolo commento che dice cosa va a cambiare.
+   ===================================================================================== */
+
+
+/* =====================================================================================
+   1. PALETTE - tema CHIARO (predefinito)
+   ===================================================================================== */
+.root {
+    /* sfondo generale delle pagine */
+    -gl-bg: #EEF2F6;
+    /* sfondo di card, sidebar, header, popup, campi di testo */
+    -gl-surface: #FFFFFF;
+    /* sfondo "tenue": area immagine, badge quantità, bottoni icona selezionati */
+    -gl-soft: #E1E8EF;
+    /* sfondo ancora più tenue: chat, anteprima font, campo descrizione non modificabile */
+    -gl-soft2: #F5F8FB;
+    /* colore del testo principale e delle icone */
+    -gl-ink: #0F2233;
+    /* colore del testo secondario (etichette, suggerimenti, conteggi) */
+    -gl-muted: #4A5B6A;
+    /* colore dei bordi leggeri (card, separatori) */
+    -gl-line: #D3DCE5;
+    /* colore dei bordi dei campi e dei bottoni secondari */
+    -gl-line2: #B9C6D2;
+    /* colore principale (bottoni primari, selezioni, link, icone accentate) */
+    -gl-accent: #14507B;
+    /* colore del testo/icone posti SOPRA il colore principale */
+    -gl-onaccent: #FFFFFF;
+    /* colore secondario (sottolineature dei titoli, bordo superiore dei dialog, pulsante chat) */
+    -gl-accent2: #FCC10F;
+    /* colore delle icone sopra il colore secondario (pulsante chat) */
+    -gl-onaccent2: #14507B;
+    /* colore di pericolo (elimina, errori) */
+    -gl-danger: #B3261E;
+    /* sfondo del tab "Elimina account" selezionato */
+    -gl-dangerbg: #FDECEA;
+    /* sfondo della zona pericolosa nel profilo */
+    -gl-dangerbg2: #FDF3F2;
+    /* sfondo evidenziato (categoria selezionata nella sidebar) */
+    -gl-hl: #FFF1BF;
+    /* sfondo dell'avatar */
+    -gl-avatar: #DCE5EE;
+    /* colore delle icone "spente" (segnaposto immagine) */
+    -gl-iconmuted: #6B7F92;
+    /* colore dei testi molto discreti (Item ID) */
+    -gl-faint: #5F7384;
+    /* velo scuro dietro ai popup */
+    -gl-overlay: rgba(15, 34, 51, 0.45);
+    /* velo scuro dietro ai dialog di conferma */
+    -gl-overlay-strong: rgba(15, 34, 51, 0.55);
+
+    /* colore dell'anello di focus (tastiera) su tutti i controlli */
+    -fx-focus-color: -gl-accent;
+    /* alone tenue di focus: disattivato */
+    -fx-faint-focus-color: transparent;
+    /* sfondo della radice della scena */
+    -fx-background-color: -gl-bg;
+    /* font predefinito dell'app (sostituito dalle classi font-* sul root) */
+    -fx-font-family: "IBM Plex Sans", "Segoe UI", "System";
+    /* dimensione del testo base */
+    -fx-font-size: 14px;
+    /* colore del testo base */
+    -fx-text-fill: -gl-ink;
+}
+
+
+/* =====================================================================================
+   2. FONT - si attivano con una classe sul root (impostazione "Font")
+   ===================================================================================== */
+.root.font-plex   { -fx-font-family: "IBM Plex Sans", "Segoe UI", "System"; }
+.root.font-inter  { -fx-font-family: "Inter", "Segoe UI", "System"; }
+.root.font-system { -fx-font-family: "System"; }
+.root.font-serif  { -fx-font-family: "Georgia", "Times New Roman", "Serif"; }
+.root.font-mono   { -fx-font-family: "IBM Plex Mono", "Consolas", "Monospaced"; }
+
+
+/* =====================================================================================
+   3. BASE - testo, icone, scroll, separatori
+   ===================================================================================== */
+
+/* colore di tutti i testi delle etichette */
+.label {
+    -fx-text-fill: -gl-ink;
+}
+
+/* etichetta sopra un campo (es. "Username", "Quantità") */
+.field-label {
+    /* colore secondario */
+    -fx-text-fill: -gl-muted;
+    /* testo più piccolo */
+    -fx-font-size: 13px;
+}
+
+/* testo di aiuto / descrizione sotto i titoli */
+.hint-text {
+    /* colore secondario */
+    -fx-text-fill: -gl-muted;
+    /* testo più piccolo */
+    -fx-font-size: 13px;
+}
+
+/* testo molto discreto (es. "Item ID: 12") */
+.faint-text {
+    /* colore molto tenue */
+    -fx-text-fill: -gl-faint;
+    /* testo piccolo */
+    -fx-font-size: 12px;
+}
+
+/* titolo di sezione dentro card e pagine */
+.section-title {
+    /* grandezza del titolo */
+    -fx-font-size: 16px;
+    /* spessore del titolo */
+    -fx-font-weight: 600;
+}
+
+/* messaggio di errore (es. login fallito) */
+.error-text {
+    /* colore errore */
+    -fx-text-fill: -gl-danger;
+}
+
+/* messaggio "nessun risultato" */
+.empty-text {
+    /* colore secondario */
+    -fx-text-fill: -gl-muted;
+    /* spazio sopra/sotto il messaggio */
+    -fx-padding: 48 0 48 0;
+}
+
+/* icone disegnate con SVGPath: solo contorno, niente riempimento */
+.icon {
+    /* nessun riempimento */
+    -fx-fill: transparent;
+    /* colore del tratto */
+    -fx-stroke: -gl-ink;
+    /* spessore del tratto */
+    -fx-stroke-width: 2;
+    /* estremità arrotondate */
+    -fx-stroke-line-cap: round;
+    /* angoli arrotondati */
+    -fx-stroke-line-join: round;
+}
+/* icona con colore principale */
+.icon-accent { -fx-stroke: -gl-accent; }
+/* icona con colore di pericolo */
+.icon-danger { -fx-stroke: -gl-danger; }
+/* icona con tratto più spesso (spunta) */
+.icon-bold {
+    /* spessore del tratto */
+    -fx-stroke-width: 2.5;
+}
+/* icona grande (avatar nel profilo) */
+.icon-large {
+    /* ingrandimento orizzontale */
+    -fx-scale-x: 2.17;
+    /* ingrandimento verticale */
+    -fx-scale-y: 2.17;
+    /* tratto più sottile per compensare l'ingrandimento */
+    -fx-stroke-width: 1.5;
+}
+/* icona del pulsante chat flottante */
+.icon-fab {
+    /* colore dell'icona sopra il colore secondario */
+    -fx-stroke: -gl-onaccent2;
+}
+
+/* aree scorrevoli: trasparenti, senza bordo */
+.scroll-pane {
+    /* sfondo trasparente */
+    -fx-background-color: transparent;
+    /* nessun margine interno dello sfondo */
+    -fx-background-insets: 0;
+    /* nessun padding */
+    -fx-padding: 0;
+}
+.scroll-pane > .viewport {
+    /* viewport trasparente */
+    -fx-background-color: transparent;
+}
+.scroll-pane > .corner {
+    /* angolo tra le due barre trasparente */
+    -fx-background-color: transparent;
+}
+
+/* linea separatrice orizzontale (es. nel profilo) */
+.separator > .line {
+    /* colore della linea */
+    -fx-border-color: -gl-soft;
+    /* spessore della linea */
+    -fx-border-width: 1 0 0 0;
+}
+
+/* linea verticale tra le colonne (filtri, profilo) */
+.vertical-divider {
+    /* colore della linea */
+    -fx-background-color: -gl-line;
+}
+
+/* tooltip */
+.tooltip {
+    /* sfondo del tooltip */
+    -fx-background-color: -gl-ink;
+    /* colore del testo del tooltip */
+    -fx-text-fill: -gl-surface;
+}
+
+
+/* =====================================================================================
+   4. PAGINE - struttura comune (header con titolo, contenuto centrato)
+   ===================================================================================== */
+
+/* sfondo di una pagina intera (Impostazioni, Profilo, Crediti, Admin, ...) */
+.page-root {
+    /* sfondo pagina */
+    -fx-background-color: -gl-bg;
+}
+
+/* barra superiore con tasto "indietro" e titolo */
+.page-header {
+    /* sfondo della barra */
+    -fx-background-color: -gl-surface;
+    /* linea sotto la barra */
+    -fx-border-color: -gl-line;
+    -fx-border-width: 0 0 1 0;
+    /* spazio interno della barra */
+    -fx-padding: 16 28 16 28;
+}
+
+/* titolo della pagina con sottolineatura colorata */
+.page-title {
+    /* grandezza del titolo */
+    -fx-font-size: 22px;
+    /* spessore del titolo */
+    -fx-font-weight: 600;
+    /* sottolineatura con il colore secondario */
+    -fx-border-color: transparent transparent -gl-accent2 transparent;
+    -fx-border-width: 0 0 4 0;
+    /* distanza tra testo e sottolineatura */
+    -fx-padding: 0 0 2 0;
+}
+
+/* scroll del contenuto della pagina */
+.page-scroll {
+    /* sfondo trasparente */
+    -fx-background-color: transparent;
+}
+
+/* contenitore che centra la colonna dei contenuti */
+.page-content-wrapper {
+    /* nessun colore proprio */
+    -fx-background-color: transparent;
+}
+
+/* colonna dei contenuti (le card, una sotto l'altra) */
+.page-content {
+    /* spazio intorno alla colonna */
+    -fx-padding: 28;
+}
+
+/* card che contiene una lista (colori categorie, simboli quantità, utenti, crediti) */
+.list-card {
+    /* sfondo della card */
+    -fx-background-color: -gl-surface;
+    /* bordo della card */
+    -fx-border-color: -gl-line;
+    /* angoli arrotondati del bordo */
+    -fx-border-radius: 12;
+    /* angoli arrotondati dello sfondo */
+    -fx-background-radius: 12;
+    /* spazio interno */
+    -fx-padding: 20 22 20 22;
+}
+
+/* riga con i tasti Annulla/Salva in fondo alle pagine */
+.form-actions {
+    /* nessun colore proprio */
+    -fx-background-color: transparent;
+}
+
+
+/* =====================================================================================
+   5. BOTTONI
+   ===================================================================================== */
+
+/* base di tutti i bottoni "btn" */
+.btn {
+    /* altezza minima comoda al tocco */
+    -fx-min-height: 44px;
+    /* altezza preferita */
+    -fx-pref-height: 44px;
+    /* spazio ai lati del testo */
+    -fx-padding: 0 18 0 18;
+    /* angoli arrotondati */
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    /* nessun margine interno dello sfondo (toglie l'effetto Modena) */
+    -fx-background-insets: 0;
+    /* spessore del testo */
+    -fx-font-weight: 500;
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+.btn:disabled {
+    /* bottone disattivato più trasparente */
+    -fx-opacity: 0.4;
+}
+
+/* bottone primario (azione principale: Salva, Login, Cerca) */
+.btn-primary {
+    /* sfondo col colore principale */
+    -fx-background-color: -gl-accent;
+    /* bordo uguale allo sfondo */
+    -fx-border-color: -gl-accent;
+    /* colore del testo */
+    -fx-text-fill: -gl-onaccent;
+}
+.btn-primary:hover {
+    /* leggera trasparenza al passaggio del mouse */
+    -fx-opacity: 0.9;
+}
+
+/* bottone secondario (Annulla, Reset, Indietro, Modifica...) */
+.btn-secondary {
+    /* sfondo chiaro */
+    -fx-background-color: -gl-surface;
+    /* bordo */
+    -fx-border-color: -gl-line2;
+    /* colore del testo */
+    -fx-text-fill: -gl-ink;
+}
+.btn-secondary:hover {
+    /* sfondo tenue al passaggio del mouse */
+    -fx-background-color: -gl-soft2;
+}
+
+/* bottone con bordo e testo del colore principale (Aggiungi, Cerca metadata) */
+.btn-accent-outline {
+    /* sfondo chiaro */
+    -fx-background-color: -gl-surface;
+    /* bordo colore principale */
+    -fx-border-color: -gl-accent;
+    /* testo colore principale */
+    -fx-text-fill: -gl-accent;
+}
+
+/* bottone di pericolo "vuoto" (Elimina, Disattiva) */
+.btn-danger-outline {
+    /* sfondo chiaro */
+    -fx-background-color: -gl-surface;
+    /* bordo di pericolo */
+    -fx-border-color: -gl-danger;
+    /* testo di pericolo */
+    -fx-text-fill: -gl-danger;
+}
+
+/* bottone di pericolo pieno (conferma eliminazione) */
+.btn-danger {
+    /* sfondo di pericolo */
+    -fx-background-color: -gl-danger;
+    /* bordo di pericolo */
+    -fx-border-color: -gl-danger;
+    /* testo sopra il pericolo */
+    -fx-text-fill: -gl-onaccent;
+}
+
+/* variante con angoli molto arrotondati (Invia nella chat) */
+.btn-pill {
+    /* angoli arrotondati a pillola */
+    -fx-background-radius: 22;
+    -fx-border-radius: 22;
+}
+
+/* bottone quadrato con sola icona (paginazione, immagine articolo) */
+.btn-icon {
+    /* dimensione minima */
+    -fx-min-width: 44px;
+    -fx-min-height: 44px;
+    -fx-pref-height: 44px;
+    /* sfondo chiaro */
+    -fx-background-color: -gl-surface;
+    /* bordo */
+    -fx-border-color: -gl-line2;
+    /* angoli arrotondati */
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    /* nessun margine interno */
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+.btn-icon:disabled {
+    /* bottone disattivato più trasparente */
+    -fx-opacity: 0.4;
+}
+
+/* bottone "×" per chiudere popup e pannelli */
+.btn-close {
+    /* dimensione */
+    -fx-min-width: 44px;
+    -fx-min-height: 44px;
+    -fx-pref-width: 44px;
+    -fx-pref-height: 44px;
+    /* nessuno sfondo */
+    -fx-background-color: transparent;
+    /* colore della X */
+    -fx-text-fill: -gl-ink;
+    /* grandezza della X */
+    -fx-font-size: 22px;
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+
+/* avatar tondo (in alto a destra nella dashboard) */
+.avatar-button {
+    /* dimensione */
+    -fx-min-width: 44px;
+    -fx-min-height: 44px;
+    -fx-pref-width: 44px;
+    -fx-pref-height: 44px;
+    /* sfondo dell'avatar */
+    -fx-background-color: -gl-avatar;
+    /* bordo */
+    -fx-border-color: -gl-line2;
+    /* forma tonda */
+    -fx-background-radius: 22;
+    -fx-border-radius: 22;
+    /* nessun margine interno */
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+/* avatar grande (pagina profilo) */
+.avatar-large {
+    /* dimensione */
+    -fx-min-width: 104px;
+    -fx-min-height: 104px;
+    -fx-pref-width: 104px;
+    -fx-pref-height: 104px;
+    /* forma tonda */
+    -fx-background-radius: 52;
+    -fx-border-radius: 52;
+}
+
+/* pulsante flottante della chat */
+.chat-fab {
+    /* dimensione */
+    -fx-min-width: 60px;
+    -fx-min-height: 60px;
+    -fx-pref-width: 60px;
+    -fx-pref-height: 60px;
+    /* sfondo col colore secondario */
+    -fx-background-color: -gl-accent2;
+    /* forma tonda */
+    -fx-background-radius: 30;
+    /* nessun margine interno */
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    /* ombra sotto il pulsante */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0, 0, 3);
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+
+/* voce di un menu a tendina (menu profilo, menu unità) */
+.btn-menu-item {
+    /* altezza */
+    -fx-min-height: 44px;
+    -fx-pref-height: 44px;
+    /* nessuno sfondo */
+    -fx-background-color: transparent;
+    /* colore del testo */
+    -fx-text-fill: -gl-ink;
+    /* spazio ai lati */
+    -fx-padding: 0 12 0 12;
+    /* angoli arrotondati al passaggio del mouse */
+    -fx-background-radius: 6;
+    /* nessun margine interno */
+    -fx-background-insets: 0;
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+.btn-menu-item:hover {
+    /* sfondo al passaggio del mouse */
+    -fx-background-color: -gl-soft2;
+}
+/* voce del menu in rosso (Esci, Rimuovi foto) */
+.btn-menu-item-danger {
+    /* testo di pericolo */
+    -fx-text-fill: -gl-danger;
+}
+
+/* bottone con il badge dell'unità di misura (popup articolo) */
+.unit-button {
+    /* dimensione */
+    -fx-min-width: 52px;
+    -fx-min-height: 52px;
+    -fx-pref-width: 52px;
+    -fx-pref-height: 52px;
+    /* sfondo chiaro */
+    -fx-background-color: -gl-surface;
+    /* bordo */
+    -fx-border-color: -gl-line2;
+    /* angoli arrotondati */
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    /* nessun margine interno */
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+
+/* gruppo di bottoni "segmentati" (ricerca nome/ID, filtri immagini/categorie) */
+.segment-group {
+    /* bordo del gruppo */
+    -fx-border-color: -gl-line2;
+    /* angoli arrotondati del bordo */
+    -fx-border-radius: 8;
+    /* angoli arrotondati dello sfondo */
+    -fx-background-radius: 8;
+    /* sfondo del gruppo */
+    -fx-background-color: -gl-surface;
+}
+/* singolo bottone del gruppo segmentato */
+.segment-button {
+    /* dimensione */
+    -fx-min-width: 48px;
+    -fx-min-height: 44px;
+    -fx-pref-width: 48px;
+    -fx-pref-height: 44px;
+    /* sfondo non selezionato */
+    -fx-background-color: -gl-surface;
+    /* angoli quadrati: l'arrotondamento lo dà il gruppo */
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+.segment-button:selected {
+    /* sfondo del bottone scelto */
+    -fx-background-color: -gl-accent;
+}
+.segment-button:selected .icon {
+    /* icona del bottone scelto */
+    -fx-stroke: -gl-onaccent;
+}
+/* variante con testo (filtro email nel pannello admin) */
+.segment-button-text {
+    /* larghezza adattata al testo */
+    -fx-pref-width: -1;
+    -fx-min-width: -1;
+    /* spazio ai lati del testo */
+    -fx-padding: 0 14 0 14;
+    /* colore del testo non selezionato */
+    -fx-text-fill: -gl-ink;
+    /* spessore del testo */
+    -fx-font-weight: 500;
+}
+.segment-button-text:selected {
+    /* colore del testo del bottone scelto */
+    -fx-text-fill: -gl-onaccent;
+}
+
+
+/* =====================================================================================
+   6. CAMPI DI INPUT (TextField, PasswordField, TextArea, ComboBox, ColorPicker, CheckBox)
+   ===================================================================================== */
+
+/* base di tutti i campi con classe "form-input" */
+.form-input {
+    /* altezza minima */
+    -fx-min-height: 44px;
+    /* sfondo del campo */
+    -fx-background-color: -gl-surface;
+    /* colore del testo digitato */
+    -fx-text-fill: -gl-ink;
+    /* colore del testo segnaposto */
+    -fx-prompt-text-fill: -gl-muted;
+    /* bordo del campo */
+    -fx-border-color: -gl-line2;
+    /* angoli arrotondati */
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    /* nessun margine interno dello sfondo */
+    -fx-background-insets: 0;
+    /* spazio interno ai lati */
+    -fx-padding: 0 12 0 12;
+}
+.form-input:focused {
+    /* bordo evidenziato quando il campo è attivo */
+    -fx-border-color: -gl-accent;
+}
+.form-input:disabled {
+    /* campo disattivato più trasparente */
+    -fx-opacity: 0.4;
+}
+
+/* area di testo multi-riga */
+.text-area.form-input {
+    /* l'altezza dipende dalle righe */
+    -fx-min-height: -1;
+    /* nessun padding: lo gestisce l'area interna */
+    -fx-padding: 0;
+}
+.text-area.form-input .content {
+    /* sfondo interno dell'area */
+    -fx-background-color: -gl-surface;
+    /* angoli arrotondati */
+    -fx-background-radius: 8;
+}
+.text-area.form-input:disabled .content,
+.text-area.form-input:readonly .content {
+    /* sfondo quando non è modificabile (descrizione in sola lettura) */
+    -fx-background-color: -gl-soft2;
+}
+.text-area.form-input .scroll-pane {
+    /* sfondo trasparente della scroll interna */
+    -fx-background-color: transparent;
+}
+
+/* campo di ricerca a pillola */
+.search-field {
+    /* altezza */
+    -fx-min-height: 48px;
+    /* angoli molto arrotondati */
+    -fx-background-radius: 24;
+    -fx-border-radius: 24;
+    /* spazio interno ai lati */
+    -fx-padding: 0 16 0 16;
+    /* grandezza del testo */
+    -fx-font-size: 15px;
+}
+
+/* campo quantità nel popup articolo */
+.quantity-input {
+    /* altezza */
+    -fx-min-height: 52px;
+    /* angoli arrotondati */
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    /* grandezza del testo */
+    -fx-font-size: 20px;
+}
+
+/* campo di scrittura della chat */
+.chat-input {
+    /* angoli molto arrotondati */
+    -fx-background-radius: 22;
+    -fx-border-radius: 22;
+    /* spazio interno ai lati */
+    -fx-padding: 0 14 0 14;
+}
+
+/* menu a tendina (ComboBox) */
+.combo-box.form-input {
+    /* niente padding: lo gestisce la cella */
+    -fx-padding: 0;
+}
+.combo-box.form-input .list-cell {
+    /* colore del testo della voce scelta */
+    -fx-text-fill: -gl-ink;
+    /* sfondo trasparente */
+    -fx-background-color: transparent;
+    /* spazio ai lati */
+    -fx-padding: 0 10 0 10;
+}
+.combo-box.form-input .arrow-button {
+    /* sfondo del pulsante freccia */
+    -fx-background-color: transparent;
+}
+.combo-box.form-input .arrow {
+    /* colore della freccia */
+    -fx-background-color: -gl-muted;
+}
+.combo-box-popup > .list-view {
+    /* sfondo della lista aperta */
+    -fx-background-color: -gl-surface;
+    /* bordo della lista aperta */
+    -fx-border-color: -gl-line2;
+}
+.combo-box-popup > .list-view .list-cell {
+    /* sfondo di ogni voce */
+    -fx-background-color: -gl-surface;
+    /* colore del testo di ogni voce */
+    -fx-text-fill: -gl-ink;
+    /* altezza della voce */
+    -fx-pref-height: 40px;
+}
+.combo-box-popup > .list-view .list-cell:hover,
+.combo-box-popup > .list-view .list-cell:selected {
+    /* sfondo della voce sotto il mouse/scelta */
+    -fx-background-color: -gl-soft;
+}
+
+/* selettore colore personalizzato (solo il quadratino del colore) */
+.custom-color-picker {
+    /* dimensione */
+    -fx-min-width: 44px;
+    -fx-min-height: 44px;
+    -fx-pref-width: 44px;
+    /* sfondo */
+    -fx-background-color: transparent;
+    /* nessun margine interno */
+    -fx-background-insets: 0;
+    -fx-padding: 4;
+    /* nasconde il nome del colore, lascia solo il quadratino */
+    -fx-color-label-visible: false;
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+.custom-color-picker .arrow-button {
+    /* nasconde la freccia del selettore */
+    -fx-pref-width: 0;
+    -fx-min-width: 0;
+    -fx-padding: 0;
+    -fx-opacity: 0;
+}
+
+/* checkbox */
+.check-box {
+    /* colore del testo */
+    -fx-text-fill: -gl-ink;
+}
+.check-box > .box {
+    /* bordo + sfondo della casella */
+    -fx-background-color: -gl-line2, -gl-surface;
+    -fx-background-insets: 0, 1;
+    /* angoli arrotondati */
+    -fx-background-radius: 4, 3;
+    /* dimensione della casella */
+    -fx-padding: 4;
+}
+.check-box:selected > .box {
+    /* sfondo della casella spuntata */
+    -fx-background-color: -gl-accent, -gl-accent;
+}
+.check-box > .box > .mark {
+    /* colore della spunta */
+    -fx-background-color: -gl-onaccent;
+}
+
+
+/* =====================================================================================
+   7. LOGIN
+   ===================================================================================== */
+
+/* sfondo della pagina di login */
+.login-root {
+    /* sfondo pagina */
+    -fx-background-color: -gl-bg;
+    /* spazio intorno alla card */
+    -fx-padding: 24;
+}
+
+/* card del login */
+.login-card {
+    /* sfondo della card */
+    -fx-background-color: -gl-surface;
+    /* bordo: sopra col colore secondario, sugli altri lati colore leggero */
+    -fx-border-color: -gl-accent2 -gl-line -gl-line -gl-line;
+    -fx-border-width: 4 1 1 1;
+    /* angoli arrotondati */
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    /* spazio interno */
+    -fx-padding: 36 32 36 32;
+}
+
+/* popup delle impostazioni server (login) */
+.server-popup {
+    /* sfondo del popup */
+    -fx-background-color: -gl-surface;
+    /* bordo */
+    -fx-border-color: -gl-line2;
+    /* angoli arrotondati */
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    /* spazio interno */
+    -fx-padding: 18;
+    /* ombra sotto il popup */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.18), 12, 0, 0, 4);
+}
+
+
+/* =====================================================================================
+   8. DASHBOARD - struttura, sidebar, categorie
+   ===================================================================================== */
+
+/* radice della dashboard */
+.dashboard-root {
+    /* sfondo pagina */
+    -fx-background-color: -gl-bg;
+}
+
+/* riga sidebar + area principale */
+.dashboard-layout {
+    /* nessun colore proprio */
+    -fx-background-color: transparent;
+}
+
+/* barra laterale delle categorie */
+.sidebar {
+    /* sfondo della sidebar */
+    -fx-background-color: -gl-surface;
+    /* linea a destra */
+    -fx-border-color: -gl-line;
+    -fx-border-width: 0 1 0 0;
+}
+
+/* zona del logo in cima alla sidebar */
+.sidebar-logo-area {
+    /* linea sotto il logo */
+    -fx-border-color: -gl-line;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* titolo "Categorie" della sidebar */
+.sidebar-title {
+    /* colore secondario */
+    -fx-text-fill: -gl-muted;
+    /* grandezza del testo */
+    -fx-font-size: 12px;
+    /* spessore del testo */
+    -fx-font-weight: 600;
+    /* spazio intorno al titolo */
+    -fx-padding: 16 18 8 18;
+}
+
+/* scroll della lista categorie */
+.sidebar-scroll {
+    /* spazio ai lati della lista */
+    -fx-padding: 0 10 0 10;
+}
+
+/* contenitore delle righe categoria */
+.category-list {
+    /* nessun colore proprio */
+    -fx-background-color: transparent;
+}
+
+/* barra con "Nuova" ed "Elimina" in fondo alla sidebar */
+.sidebar-footer {
+    /* linea sopra la barra */
+    -fx-border-color: -gl-line;
+    -fx-border-width: 1 0 0 0;
+    /* spazio interno */
+    -fx-padding: 14;
+}
+
+/* riga/tasto categoria */
+.category-button {
+    /* altezza minima */
+    -fx-min-height: 44px;
+    /* spazio ai lati */
+    -fx-padding: 0 8 0 8;
+    /* angoli arrotondati */
+    -fx-background-radius: 8;
+    /* sfondo non selezionata */
+    -fx-background-color: transparent;
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+.category-button:hover {
+    /* sfondo al passaggio del mouse */
+    -fx-background-color: -gl-soft2;
+}
+/* categoria selezionata (classe aggiunta dal controller) */
+.category-button.selected {
+    /* sfondo evidenziato */
+    -fx-background-color: -gl-hl;
+}
+/* checkbox della riga categoria */
+.category-checkbox {
+    /* nessun colore proprio */
+    -fx-background-color: transparent;
+}
+/* nome categoria */
+.category-name {
+    /* grandezza del testo */
+    -fx-font-size: 14px;
+}
+/* numero di articoli della categoria */
+.category-count {
+    /* colore secondario */
+    -fx-text-fill: -gl-muted;
+    /* grandezza del testo */
+    -fx-font-size: 12px;
+}
+
+/* quadratino colorato della categoria (il colore si imposta da codice con setStyle) */
+.color-swatch {
+    /* dimensione */
+    -fx-min-width: 14px;
+    -fx-min-height: 14px;
+    -fx-pref-width: 14px;
+    -fx-pref-height: 14px;
+    -fx-max-width: 14px;
+    -fx-max-height: 14px;
+    /* colore di riserva se il codice non ne imposta uno */
+    -fx-background-color: -gl-iconmuted;
+    /* angoli arrotondati */
+    -fx-background-radius: 4;
+}
+/* quadratino più grande (pagina colori) */
+.color-swatch-lg {
+    /* dimensione */
+    -fx-min-width: 16px;
+    -fx-min-height: 16px;
+    -fx-pref-width: 16px;
+    -fx-pref-height: 16px;
+    -fx-max-width: 16px;
+    -fx-max-height: 16px;
+}
+/* pallino colorato della categoria dentro la card articolo / chip (colore da codice) */
+.category-dot {
+    /* dimensione */
+    -fx-min-width: 14px;
+    -fx-min-height: 14px;
+    -fx-pref-width: 14px;
+    -fx-pref-height: 14px;
+    -fx-max-width: 14px;
+    -fx-max-height: 14px;
+    /* colore di riserva */
+    -fx-background-color: -gl-iconmuted;
+    /* angoli arrotondati */
+    -fx-background-radius: 4;
+}
+/* chip categoria nel popup articolo (HBox con pallino + nome, creato da codice) */
+.category-chip {
+    /* altezza */
+    -fx-min-height: 30px;
+    /* spazio interno */
+    -fx-padding: 0 10 0 10;
+    /* bordo */
+    -fx-border-color: -gl-line;
+    /* angoli arrotondati */
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    /* spazio tra pallino e nome */
+    -fx-spacing: 6;
+    -fx-alignment: CENTER_LEFT;
+}
+
+
+/* =====================================================================================
+   9. DASHBOARD - testata, ricerca, filtri
+   ===================================================================================== */
+
+/* blocco in alto (titolo, ricerca, filtri) */
+.top-section {
+    /* sfondo del blocco */
+    -fx-background-color: -gl-surface;
+    /* linea sotto il blocco */
+    -fx-border-color: -gl-line;
+    -fx-border-width: 0 0 1 0;
+    /* spazio interno */
+    -fx-padding: 20 28 22 28;
+}
+
+/* titolo "GestioLan" */
+.app-title {
+    /* grandezza del titolo */
+    -fx-font-size: 26px;
+    /* spessore del titolo */
+    -fx-font-weight: 600;
+    /* sottolineatura col colore secondario */
+    -fx-border-color: transparent transparent -gl-accent2 transparent;
+    -fx-border-width: 0 0 4 0;
+    /* distanza tra testo e sottolineatura */
+    -fx-padding: 0 0 2 0;
+}
+
+/* riga dei filtri */
+.filter-row {
+    /* nessun colore proprio */
+    -fx-background-color: transparent;
+}
+/* griglia del filtro quantità */
+.filter-grid {
+    /* spazio a destra prima del divisore */
+    -fx-padding: 0 24 0 0;
+}
+/* colonna dei filtri immagini/categorie */
+.filter-segments {
+    /* spazio ai lati */
+    -fx-padding: 0 32 0 32;
+}
+/* griglia dei 4 bottoni azione */
+.action-grid {
+    /* spazio a sinistra dopo il divisore */
+    -fx-padding: 0 0 0 24;
+}
+
+
+/* =====================================================================================
+   10. DASHBOARD - griglia articoli e paginazione
+   ===================================================================================== */
+
+/* area sotto la testata con griglia e paginazione */
+.items-section {
+    /* spazio intorno all'area */
+    -fx-padding: 24 24 0 28;
+}
+/* scroll della griglia */
+.items-scroll {
+    /* sfondo trasparente */
+    -fx-background-color: transparent;
+}
+/* contenitore della griglia */
+.items-container {
+    /* spazio interno */
+    -fx-padding: 4 4 16 4;
+}
+/* griglia di card articolo */
+.item-grid {
+    /* nessun colore proprio */
+    -fx-background-color: transparent;
+}
+
+/* card di un articolo */
+.item-card {
+    /* sfondo della card */
+    -fx-background-color: -gl-surface;
+    /* bordo */
+    -fx-border-color: -gl-line;
+    /* angoli arrotondati */
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+.item-card:hover {
+    /* bordo più marcato al passaggio del mouse */
+    -fx-border-color: -gl-line2;
+}
+/* card selezionata in modalità elimina (classe aggiunta dal controller) */
+.item-card.selected {
+    /* anello di selezione col colore principale */
+    -fx-border-color: -gl-accent;
+    -fx-border-width: 3;
+}
+/* area dell'immagine nella card */
+.item-card-image-area {
+    /* sfondo dell'area immagine */
+    -fx-background-color: -gl-soft;
+    /* angoli arrotondati solo in alto */
+    -fx-background-radius: 12 12 0 0;
+}
+/* testo "Nessuna immagine" */
+.item-card-no-image {
+    /* colore secondario */
+    -fx-text-fill: -gl-muted;
+    /* grandezza del testo */
+    -fx-font-size: 12px;
+}
+/* box immagine nel popup articolo */
+.item-image-box {
+    /* sfondo */
+    -fx-background-color: -gl-soft;
+    /* angoli arrotondati */
+    -fx-background-radius: 10;
+}
+/* corpo testuale della card */
+.item-card-body {
+    /* spazio interno */
+    -fx-padding: 12 14 14 14;
+}
+/* nome articolo */
+.item-card-name {
+    /* grandezza del testo */
+    -fx-font-size: 15px;
+    /* spessore del testo */
+    -fx-font-weight: 500;
+}
+/* etichetta "Categorie:" */
+.item-card-label {
+    /* colore secondario */
+    -fx-text-fill: -gl-muted;
+    /* grandezza del testo */
+    -fx-font-size: 12px;
+}
+/* etichetta "Quantità:" */
+.item-card-label-large {
+    /* colore secondario */
+    -fx-text-fill: -gl-muted;
+    /* grandezza del testo */
+    -fx-font-size: 14px;
+}
+/* numero della quantità */
+.item-card-quantity {
+    /* grandezza del testo */
+    -fx-font-size: 14px;
+}
+/* scritta "Selezionato" */
+.item-card-selected {
+    /* colore principale */
+    -fx-text-fill: -gl-accent;
+    /* grandezza del testo */
+    -fx-font-size: 12px;
+    /* spessore del testo */
+    -fx-font-weight: 600;
+}
+
+/* badge del tipo di quantità (24px) */
+.unit-badge {
+    /* dimensione */
+    -fx-min-width: 24px;
+    -fx-min-height: 24px;
+    -fx-pref-height: 24px;
+    -fx-max-height: 24px;
+    /* sfondo del badge */
+    -fx-background-color: -gl-soft;
+    /* angoli arrotondati */
+    -fx-background-radius: 6;
+    /* spazio interno */
+    -fx-padding: 0 4 0 4;
+}
+/* badge medio (34px) */
+.unit-badge-md {
+    /* dimensione */
+    -fx-min-width: 34px;
+    -fx-min-height: 34px;
+    -fx-pref-height: 34px;
+    -fx-max-height: 34px;
+}
+/* badge grande (44px) */
+.unit-badge-lg {
+    /* dimensione */
+    -fx-min-width: 44px;
+    -fx-min-height: 44px;
+    -fx-pref-height: 44px;
+    -fx-max-height: 44px;
+}
+/* testo/emoji dentro il badge */
+.unit-badge-text {
+    /* colore principale */
+    -fx-text-fill: -gl-accent;
+    /* grandezza del testo */
+    -fx-font-size: 12px;
+    /* spessore del testo */
+    -fx-font-weight: 600;
+}
+.unit-badge-md .unit-badge-text {
+    /* testo più grande nel badge medio */
+    -fx-font-size: 17px;
+}
+.unit-badge-lg .unit-badge-text {
+    /* testo più grande nel badge grande */
+    -fx-font-size: 22px;
+}
+/* icona "scatola" dentro il badge */
+.unit-icon {
+    /* colore del tratto */
+    -fx-stroke: -gl-accent;
+    /* riduzione per il badge piccolo */
+    -fx-scale-x: 0.67;
+    -fx-scale-y: 0.67;
+}
+.unit-badge-md .unit-icon {
+    /* ingrandimento per il badge medio */
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
+}
+.unit-badge-lg .unit-icon {
+    /* ingrandimento per il badge grande */
+    -fx-scale-x: 1.5;
+    -fx-scale-y: 1.5;
+}
+
+/* barra di paginazione */
+.pagination-bar {
+    /* linea sopra la barra */
+    -fx-border-color: -gl-line;
+    -fx-border-width: 1 0 0 0;
+    /* spazio interno (a destra lascia spazio al pulsante chat) */
+    -fx-padding: 10 72 12 0;
+}
+/* testo "1–8 di 30 articoli" */
+.pagination-label {
+    /* colore secondario */
+    -fx-text-fill: -gl-muted;
+    /* grandezza del testo */
+    -fx-font-size: 13px;
+}
+/* testo "Pagina 1 di 4" */
+.page-label {
+    /* grandezza del testo */
+    -fx-font-size: 14px;
+}
+
+
+/* =====================================================================================
+   11. POPUP, MENU E DIALOG
+   ===================================================================================== */
+
+/* velo scuro dietro ai popup */
+.overlay {
+    /* colore del velo */
+    -fx-background-color: -gl-overlay;
+    /* spazio tra il popup e il bordo finestra */
+    -fx-padding: 20;
+}
+/* velo più scuro (dialog di conferma) */
+.overlay-strong {
+    /* colore del velo */
+    -fx-background-color: -gl-overlay-strong;
+}
+
+/* finestra del popup */
+.dialog {
+    /* sfondo del popup */
+    -fx-background-color: -gl-surface;
+    /* angoli arrotondati */
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    /* ombra sotto il popup */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 24, 0, 0, 8);
+}
+/* popup con riga colorata in alto (colore secondario) */
+.dialog-accent {
+    /* riga in alto */
+    -fx-border-color: -gl-accent2 transparent transparent transparent;
+    -fx-border-width: 4 0 0 0;
+}
+/* popup con riga rossa in alto (azioni pericolose) */
+.dialog-danger {
+    /* riga in alto */
+    -fx-border-color: -gl-danger transparent transparent transparent;
+    -fx-border-width: 4 0 0 0;
+    /* angoli arrotondati */
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+}
+/* popup piccolo (dialog di conferma) */
+.dialog-small {
+    /* spazio interno */
+    -fx-padding: 24;
+}
+/* popup con spazio interno (emoji) */
+.dialog-padded {
+    /* spazio interno */
+    -fx-padding: 20;
+}
+/* intestazione del popup articolo */
+.dialog-header {
+    /* linea sotto l'intestazione */
+    -fx-border-color: -gl-soft;
+    -fx-border-width: 0 0 1 0;
+    /* spazio interno */
+    -fx-padding: 8 8 8 24;
+}
+/* corpo del popup articolo */
+.dialog-body {
+    /* spazio interno */
+    -fx-padding: 20 24 20 24;
+}
+/* scroll dentro un popup */
+.dialog-scroll {
+    /* sfondo trasparente */
+    -fx-background-color: transparent;
+}
+/* piè del popup articolo con i bottoni */
+.dialog-footer {
+    /* linea sopra il piè */
+    -fx-border-color: -gl-soft;
+    -fx-border-width: 1 0 0 0;
+    /* spazio interno */
+    -fx-padding: 14 24 14 24;
+}
+/* titolo di un dialog */
+.dialog-title {
+    /* grandezza del titolo */
+    -fx-font-size: 18px;
+    /* spessore del titolo */
+    -fx-font-weight: 600;
+}
+/* titolo rosso (dialog di eliminazione) */
+.dialog-title-danger {
+    /* colore di pericolo */
+    -fx-text-fill: -gl-danger;
+}
+/* titolo normale (popup articolo, emoji) */
+.dialog-title-plain {
+    /* grandezza del titolo */
+    -fx-font-size: 16px;
+    /* spessore del titolo */
+    -fx-font-weight: 600;
+}
+
+/* menu a tendina (profilo, avatar, unità) */
+.popup-menu {
+    /* sfondo del menu */
+    -fx-background-color: -gl-surface;
+    /* bordo */
+    -fx-border-color: -gl-line2;
+    /* angoli arrotondati */
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    /* spazio interno */
+    -fx-padding: 6;
+    /* ombra sotto il menu */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.18), 12, 0, 0, 4);
+}
+
+/* griglia delle emoji */
+.emoji-grid {
+    /* spazio interno */
+    -fx-padding: 2;
+}
+/* singola emoji */
+.emoji-button {
+    /* dimensione */
+    -fx-min-width: 48px;
+    -fx-min-height: 48px;
+    -fx-pref-width: 48px;
+    -fx-pref-height: 48px;
+    /* sfondo */
+    -fx-background-color: -gl-soft2;
+    /* angoli arrotondati */
+    -fx-background-radius: 8;
+    /* grandezza dell'emoji */
+    -fx-font-size: 24px;
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+.emoji-button:hover {
+    /* sfondo al passaggio del mouse */
+    -fx-background-color: -gl-soft;
+}
+
+
+/* =====================================================================================
+   12. CHAT ASSISTENTE
+   ===================================================================================== */
+
+/* pannello della chat */
+.chat-panel {
+    /* sfondo del pannello */
+    -fx-background-color: -gl-surface;
+    /* linea a sinistra */
+    -fx-border-color: -gl-line2;
+    -fx-border-width: 0 0 0 1;
+}
+/* testata della chat */
+.chat-header {
+    /* altezza */
+    -fx-min-height: 64px;
+    -fx-pref-height: 64px;
+    /* linea sotto la testata */
+    -fx-border-color: -gl-line;
+    -fx-border-width: 0 0 1 0;
+    /* spazio interno */
+    -fx-padding: 0 18 0 18;
+}
+/* titolo della chat */
+.chat-title {
+    /* grandezza del titolo */
+    -fx-font-size: 16px;
+    /* spessore del titolo */
+    -fx-font-weight: 600;
+}
+/* scroll dei messaggi */
+.chat-body-scroll {
+    /* sfondo dell'area messaggi */
+    -fx-background-color: -gl-soft2;
+}
+/* contenitore dei messaggi */
+.chat-body {
+    /* sfondo dell'area messaggi */
+    -fx-background-color: -gl-soft2;
+    /* spazio interno */
+    -fx-padding: 16;
+}
+/* riga di un messaggio */
+.chat-message-row {
+    /* nessun colore proprio */
+    -fx-background-color: transparent;
+}
+/* fumetto base */
+.chat-bubble {
+    /* spazio interno */
+    -fx-padding: 10 14 10 14;
+}
+/* fumetto dell'utente */
+.chat-bubble-mine {
+    /* sfondo del fumetto */
+    -fx-background-color: -gl-accent;
+    /* angoli arrotondati (basso a destra meno) */
+    -fx-background-radius: 14 14 4 14;
+    /* colore del testo */
+    -fx-text-fill: -gl-onaccent;
+}
+/* fumetto dell'assistente */
+.chat-bubble-theirs {
+    /* sfondo del fumetto */
+    -fx-background-color: -gl-surface;
+    /* bordo del fumetto */
+    -fx-border-color: -gl-line;
+    /* angoli arrotondati (basso a sinistra meno) */
+    -fx-background-radius: 14 14 14 4;
+    -fx-border-radius: 14 14 14 4;
+}
+/* barra di scrittura */
+.chat-input-bar {
+    /* linea sopra la barra */
+    -fx-border-color: -gl-line;
+    -fx-border-width: 1 0 0 0;
+    /* spazio interno */
+    -fx-padding: 12;
+}
+
+
+/* =====================================================================================
+   13. IMPOSTAZIONI - card per impostazione (tutte con la stessa classe "setting-card")
+   ===================================================================================== */
+
+/* card di una impostazione: cambia questa regola per cambiare TUTTE le card delle impostazioni */
+.setting-card {
+    /* sfondo della card */
+    -fx-background-color: -gl-surface;
+    /* bordo della card */
+    -fx-border-color: -gl-line;
+    /* angoli arrotondati */
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    /* spazio interno */
+    -fx-padding: 20 22 20 22;
+}
+/* titolo della card */
+.setting-card-title {
+    /* grandezza del titolo */
+    -fx-font-size: 16px;
+    /* spessore del titolo */
+    -fx-font-weight: 600;
+}
+/* descrizione sotto il titolo */
+.setting-card-description {
+    /* colore secondario */
+    -fx-text-fill: -gl-muted;
+    /* grandezza del testo */
+    -fx-font-size: 13px;
+}
+/* area dei controlli della card */
+.setting-card-content {
+    /* nessun colore proprio */
+    -fx-background-color: transparent;
+}
+
+/* anteprima del font */
+.preview-box {
+    /* sfondo dell'anteprima */
+    -fx-background-color: -gl-soft2;
+    /* bordo */
+    -fx-border-color: -gl-soft;
+    /* angoli arrotondati */
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    /* spazio interno */
+    -fx-padding: 12 14 12 14;
+}
+
+/* riga "colore categoria" nella pagina colori */
+.category-color-card {
+    /* linea sopra ogni riga */
+    -fx-border-color: -gl-soft;
+    -fx-border-width: 1 0 0 0;
+    /* spazio sopra/sotto */
+    -fx-padding: 6 0 6 0;
+}
+/* contenitore dei colori della palette */
+.swatch-pane {
+    /* nessun colore proprio */
+    -fx-background-color: transparent;
+}
+/* bottone-colore della palette (contiene una Region "swatch-dot") */
+.swatch-button {
+    /* dimensione */
+    -fx-min-width: 44px;
+    -fx-min-height: 44px;
+    -fx-pref-width: 44px;
+    -fx-pref-height: 44px;
+    /* nessuno sfondo */
+    -fx-background-color: transparent;
+    /* nessun margine interno */
+    -fx-padding: 0;
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+/* pallino colorato dentro il bottone (colore da codice) */
+.swatch-dot {
+    /* dimensione */
+    -fx-min-width: 24px;
+    -fx-min-height: 24px;
+    -fx-pref-width: 24px;
+    -fx-pref-height: 24px;
+    -fx-max-width: 24px;
+    -fx-max-height: 24px;
+    /* angoli arrotondati */
+    -fx-background-radius: 7;
+    /* alone chiaro attorno al pallino */
+    -fx-border-color: -gl-surface;
+    -fx-border-width: 2;
+    -fx-border-radius: 9;
+}
+/* pallino del colore attualmente scelto (classe aggiunta dal controller) */
+.swatch-button.selected .swatch-dot {
+    /* anello scuro attorno al colore scelto */
+    -fx-effect: dropshadow(gaussian, -gl-ink, 0, 1, 0, 0);
+}
+
+/* riga "simbolo quantità" nella pagina simboli */
+.unit-symbol-card {
+    /* linea sopra ogni riga */
+    -fx-border-color: -gl-soft;
+    -fx-border-width: 1 0 0 0;
+    /* spazio sopra/sotto */
+    -fx-padding: 8 0 8 0;
+}
+/* nome del tipo di quantità */
+.unit-name {
+    /* grandezza del testo */
+    -fx-font-size: 14px;
+}
+
+
+/* =====================================================================================
+   14. PROFILO
+   ===================================================================================== */
+
+/* riga colonna sinistra + contenuto */
+.profile-layout {
+    /* spazio intorno */
+    -fx-padding: 28;
+}
+/* colonna sinistra (avatar + schede) */
+.profile-sidebar {
+    /* spazio a destra prima del divisore */
+    -fx-padding: 0 28 0 0;
+}
+/* contenuto della scheda scelta */
+.profile-content {
+    /* spazio a sinistra dopo il divisore */
+    -fx-padding: 0 0 0 28;
+}
+/* tasto scheda (Account / Lingua / Elimina account) */
+.profile-tab {
+    /* altezza */
+    -fx-min-height: 44px;
+    -fx-pref-height: 44px;
+    /* nessuno sfondo se non selezionato */
+    -fx-background-color: transparent;
+    /* allineamento a sinistra */
+    -fx-alignment: CENTER_LEFT;
+    /* spazio ai lati */
+    -fx-padding: 0 14 0 14;
+    /* angoli arrotondati */
+    -fx-background-radius: 8;
+    /* spessore del testo */
+    -fx-font-weight: 500;
+    /* colore del testo */
+    -fx-text-fill: -gl-ink;
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+.profile-tab:selected {
+    /* sfondo della scheda scelta */
+    -fx-background-color: -gl-soft;
+}
+/* scheda "Elimina account" */
+.profile-tab-danger {
+    /* testo rosso */
+    -fx-text-fill: -gl-danger;
+}
+.profile-tab-danger:selected {
+    /* sfondo rosato quando scelta */
+    -fx-background-color: -gl-dangerbg;
+}
+
+/* zona pericolosa */
+.danger-zone {
+    /* sfondo rosato */
+    -fx-background-color: -gl-dangerbg2;
+    /* bordo rosso */
+    -fx-border-color: -gl-danger;
+    /* angoli arrotondati */
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    /* spazio interno */
+    -fx-padding: 18;
+}
+/* titolo della zona pericolosa */
+.danger-zone-title {
+    /* colore di pericolo */
+    -fx-text-fill: -gl-danger;
+    /* grandezza del titolo */
+    -fx-font-size: 16px;
+    /* spessore del titolo */
+    -fx-font-weight: 600;
+}
+/* testo della zona pericolosa */
+.danger-zone-text {
+    /* colore del testo */
+    -fx-text-fill: -gl-ink;
+}
+
+/* elenco lingue */
+.language-list {
+    /* bordo dell'elenco */
+    -fx-border-color: -gl-line;
+    /* angoli arrotondati */
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    /* sfondo dell'elenco */
+    -fx-background-color: -gl-surface;
+}
+/* riga lingua */
+.language-row {
+    /* altezza minima */
+    -fx-min-height: 48px;
+    /* spazio ai lati */
+    -fx-padding: 0 14 0 14;
+    /* linea sotto la riga */
+    -fx-border-color: -gl-soft;
+    -fx-border-width: 0 0 1 0;
+    /* cursore a manina */
+    -fx-cursor: hand;
+}
+.language-row:hover {
+    /* sfondo al passaggio del mouse */
+    -fx-background-color: -gl-soft2;
+}
+/* lingua scelta (classe aggiunta dal controller) */
+.language-row.selected {
+    /* sfondo della lingua scelta */
+    -fx-background-color: -gl-soft2;
+}
+/* nome lingua */
+.language-name {
+    /* grandezza del testo */
+    -fx-font-size: 14px;
+}
+/* bandierina (sfondo impostato da codice) */
+.flag {
+    /* dimensione */
+    -fx-min-width: 26px;
+    -fx-min-height: 18px;
+    -fx-pref-width: 26px;
+    -fx-pref-height: 18px;
+    -fx-max-width: 26px;
+    -fx-max-height: 18px;
+    /* colore di riserva */
+    -fx-background-color: -gl-soft;
+    /* bordo sottile */
+    -fx-border-color: -gl-line2;
+    /* angoli arrotondati */
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+}
+
+
+/* =====================================================================================
+   15. PANNELLO ADMIN
+   ===================================================================================== */
+
+/* contenitore tabella (scroll orizzontale se stretta) */
+.table-scroll {
+    /* sfondo trasparente */
+    -fx-background-color: transparent;
+}
+/* intestazione colonne utenti */
+.user-row-header {
+    /* spazio sotto l'intestazione */
+    -fx-padding: 0 0 6 0;
+}
+/* testo dell'intestazione colonne */
+.table-header-label {
+    /* colore secondario */
+    -fx-text-fill: -gl-muted;
+    /* grandezza del testo */
+    -fx-font-size: 12px;
+}
+/* riga utente */
+.user-row {
+    /* altezza minima */
+    -fx-min-height: 56px;
+    /* linea sopra la riga */
+    -fx-border-color: -gl-soft;
+    -fx-border-width: 1 0 0 0;
+}
+/* ID utente */
+.user-id {
+    /* colore secondario */
+    -fx-text-fill: -gl-muted;
+    /* grandezza del testo */
+    -fx-font-size: 13px;
+}
+/* nome utente */
+.user-name {
+    /* grandezza del testo */
+    -fx-font-size: 14px;
+}
+/* email utente */
+.user-email {
+    /* colore secondario */
+    -fx-text-fill: -gl-muted;
+}
+/* ruolo utente */
+.user-role {
+    /* grandezza del testo */
+    -fx-font-size: 12px;
+    /* spessore del testo */
+    -fx-font-weight: 600;
+}
+
+
+/* =====================================================================================
+   16. VARIANTI DI TEMA - si attivano con una classe sul root: theme-dark / theme-mono / theme-monodark
+   ===================================================================================== */
+
+/* TEMA SCURO */
+.root.theme-dark {
+    -gl-bg: #0E1A24;
+    -gl-surface: #15232F;
+    -gl-soft: #1F3140;
+    -gl-soft2: #121F2A;
+    -gl-ink: #E8EEF3;
+    -gl-muted: #9DB0BF;
+    -gl-line: #2A3F51;
+    -gl-line2: #3B5368;
+    -gl-accent: #5AA2D6;
+    -gl-onaccent: #0B1620;
+    -gl-accent2: #FCC10F;
+    -gl-onaccent2: #14507B;
+    -gl-danger: #FF8A80;
+    -gl-dangerbg: #3A1D1D;
+    -gl-dangerbg2: #301A1A;
+    -gl-hl: #3A3216;
+    -gl-avatar: #24394B;
+    -gl-iconmuted: #7F97AB;
+    -gl-faint: #8FA4B5;
+}
+
+/* TEMA MONOCROMO (chiaro) */
+.root.theme-mono {
+    -gl-bg: #F1F1F1;
+    -gl-surface: #FFFFFF;
+    -gl-soft: #E4E4E4;
+    -gl-soft2: #F7F7F7;
+    -gl-ink: #111111;
+    -gl-muted: #555555;
+    -gl-line: #D2D2D2;
+    -gl-line2: #A6A6A6;
+    -gl-accent: #2B2B2B;
+    -gl-onaccent: #FFFFFF;
+    -gl-accent2: #8C8C8C;
+    -gl-onaccent2: #111111;
+    -gl-danger: #B3261E;
+    -gl-dangerbg: #EEEEEE;
+    -gl-dangerbg2: #F4F4F4;
+    -gl-hl: #E6E6E6;
+    -gl-avatar: #DADADA;
+    -gl-iconmuted: #777777;
+    -gl-faint: #666666;
+}
+
+/* TEMA MONOCROMO SCURO */
+.root.theme-monodark {
+    -gl-bg: #0F0F0F;
+    -gl-surface: #1A1A1A;
+    -gl-soft: #2A2A2A;
+    -gl-soft2: #141414;
+    -gl-ink: #EDEDED;
+    -gl-muted: #A3A3A3;
+    -gl-line: #333333;
+    -gl-line2: #4A4A4A;
+    -gl-accent: #D9D9D9;
+    -gl-onaccent: #111111;
+    -gl-accent2: #9A9A9A;
+    -gl-onaccent2: #111111;
+    -gl-danger: #FF8A80;
+    -gl-dangerbg: #2E1F1F;
+    -gl-dangerbg2: #251A1A;
+    -gl-hl: #333333;
+    -gl-avatar: #2F2F2F;
+    -gl-iconmuted: #8A8A8A;
+    -gl-faint: #9A9A9A;
+}
