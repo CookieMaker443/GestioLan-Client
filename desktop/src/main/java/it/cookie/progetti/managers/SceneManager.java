@@ -1,9 +1,5 @@
 package it.cookie.progetti.managers;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -30,8 +26,8 @@ public class SceneManager {
 
     public enum SceneKeys {
         LOGIN_VIEW("LoginView"),
-        MAIN_MENU_VIEW("MainMenuView"),
         SERVER_CONFIG_POPUP("ServerConfigView"),
+        DASHBOARD_VIEW("DashboardView"),
         ITEM_CARD("ItemCard");
 
         private final String key;
@@ -72,7 +68,7 @@ public class SceneManager {
     public void loadScene(Stage stage, SceneKeys sceneKey, String title, double minWidth, double minHeight) {
         try {
             // prende la scena passarta come parametro e la carica
-            loader = new FXMLLoader(getClass().getResource(FXML_SCENES.get(sceneKey.getKey())), langBundle);
+            loader = new FXMLLoader(getClass().getResource(FXML_SCENES.get(sceneKey.getKey())), LanguageManager.getInstance().getBundle());
             
             // Carica il file FXML
             Parent root = loader.load();
@@ -92,7 +88,7 @@ public class SceneManager {
             stage.show();
             
         } catch (Exception e) {
-            // e.printStackTrace();
+             e.printStackTrace();
             //showAlert("Error", "Unable to load the scene: " + sceneKey.getKey(), AlertType.ERROR);
             showAlert(LanguageManager.getInstance().getBundle().getString("alert.errorTitle"),
                 LanguageManager.getInstance().getBundle().getString("alert.errorLoadScene") + " " + sceneKey.getKey(), AlertType.ERROR);
@@ -153,34 +149,5 @@ public class SceneManager {
         alert.showAndWait();
     }
 
-    // Applica il tema alla scena
-    private void applyTheme(Scene scene) {
-        File externalCss = new File(SettingsManager.CSS_DIR + "/" + SettingsManager.getInstance().getTheme());
-        
-        if (externalCss.exists()) {
-            scene.getStylesheets().add(externalCss.toURI().toString());
-        } else {
-            // fallback al CSS interno nel jar — non può mai mancare
-            String internalCss = getClass()
-                .getResource("/css/default.css")
-                .toExternalForm();
-            scene.getStylesheets().add(internalCss);
-            System.out.println("[WARN] Tema non trovato, uso il default interno");
-        }
-    }
 
-    private void copyDefaultThemeIfMissing() {
-        File defaultCss = new File(SettingsManager.CSS_DIR + "/default.css");
-        if (defaultCss.exists()) return;
-        
-        try (InputStream in = getClass()
-                .getResourceAsStream("/css/default.css")) {
-            if (in != null) {
-                Files.copy(in, defaultCss.toPath());
-                System.out.println("Tema default copiato in: " + defaultCss.getAbsolutePath());
-            }
-        } catch (IOException e) {
-            System.out.println("Errore copia tema: " + e.getMessage());
-        }
-    }
 }
