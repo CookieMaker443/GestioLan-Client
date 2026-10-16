@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<!-- POPUP: dettaglio articolo (si apre cliccando una ItemCard). Overlay da aggiungere sopra la dashboard.
+     Modalità lettura: footer = [Elimina] ........ [Modifica]
+     Modalità modifica: titleField visibile, descriptionArea editabile, footer = [Annulla modifiche] ........ [Salva]
+     (il controller alterna visible/managed dei bottoni e di titleBox). -->
+<StackPane fx:id="root" styleClass="overlay" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.gestiolan.controller.ItemDetailController">
+    <VBox fx:id="dialog" styleClass="dialog, dialog-accent" maxWidth="760" maxHeight="-Infinity">
+
+        <!-- Intestazione -->
+        <HBox styleClass="dialog-header" alignment="CENTER_LEFT">
+            <Label fx:id="itemNameLabel" styleClass="dialog-title-plain" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            <Button fx:id="closeButton" styleClass="btn-close" text="×" onAction="#onClose">
+                <tooltip><Tooltip text="%common.close"/></tooltip>
+            </Button>
+        </HBox>
+
+        <!-- Corpo -->
+        <ScrollPane styleClass="dialog-scroll" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+            <VBox styleClass="dialog-body" spacing="16">
+                <HBox spacing="24">
+
+                    <!-- Colonna immagine -->
+                    <VBox spacing="10" minWidth="240" prefWidth="240" maxWidth="240">
+                        <StackPane styleClass="item-image-box" minHeight="200" prefHeight="200" maxHeight="200">
+                            <ImageView fx:id="itemImage" fitWidth="240" fitHeight="200" preserveRatio="true" visible="false" managed="false"/>
+                            <Label fx:id="noImageLabel" styleClass="item-card-no-image" text="%item.noImage"/>
+                        </StackPane>
+                        <HBox spacing="8">
+                            <Button fx:id="uploadImageButton" styleClass="btn-icon" maxWidth="Infinity" HBox.hgrow="ALWAYS" onAction="#onUploadImage">
+                                <graphic><SVGPath styleClass="icon, icon-accent" content="M12 16V4M7 9l5-5 5 5M4 20h16"/></graphic>
+                                <tooltip><Tooltip text="%item.image.upload"/></tooltip>
+                            </Button>
+                            <Button fx:id="removeImageButton" styleClass="btn-icon" maxWidth="Infinity" HBox.hgrow="ALWAYS" onAction="#onRemoveImage">
+                                <graphic><SVGPath styleClass="icon, icon-danger" content="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></graphic>
+                                <tooltip><Tooltip text="%item.image.remove"/></tooltip>
+                            </Button>
+                            <Button fx:id="refreshImageButton" styleClass="btn-icon" maxWidth="Infinity" HBox.hgrow="ALWAYS" onAction="#onRefreshImage">
+                                <graphic><SVGPath styleClass="icon, icon-accent" content="M20 11a8 8 0 1 0-2 6M20 4v7h-7"/></graphic>
+                                <tooltip><Tooltip text="%item.image.refresh"/></tooltip>
+                            </Button>
+                        </HBox>
+                        <Button fx:id="searchMetadataButton" styleClass="btn, btn-accent-outline" text="%item.searchMetadata" maxWidth="Infinity" onAction="#onSearchMetadata"/>
+                    </VBox>
+
+                    <!-- Colonna dati -->
+                    <VBox spacing="14" minWidth="260" HBox.hgrow="ALWAYS">
+                        <Label styleClass="field-label" text="%item.quantity"/>
+
+                        <StackPane alignment="TOP_LEFT">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Button fx:id="unitButton" styleClass="unit-button" onAction="#onToggleUnitMenu">
+                                    <graphic><fx:include fx:id="unitBadge" source="components/UnitBadge.fxml" styleClass="unit-badge-md"/></graphic>
+                                    <tooltip><Tooltip text="%item.unitTip"/></tooltip>
+                                </Button>
+                                <TextField fx:id="quantityField" styleClass="form-input, quantity-input" prefWidth="140" maxWidth="140"/>
+                            </HBox>
+                            <!-- Menu unità: il controller aggiunge components/UnitOption.fxml per ogni tipo di quantità -->
+                            <VBox fx:id="unitMenu" styleClass="popup-menu" maxWidth="220" maxHeight="-Infinity" visible="false" managed="false">
+                                <StackPane.margin>
+                                    <Insets top="58"/>
+                                </StackPane.margin>
+                            </VBox>
+                        </StackPane>
+
+                        <Label styleClass="field-label" text="%item.categories"/>
+                        <!-- Il controller aggiunge un chip per categoria: HBox "category-chip" con Region "category-dot" colorata + Label nome -->
+                        <FlowPane fx:id="categoryChips" hgap="8" vgap="8"/>
+                    </VBox>
+                </HBox>
+
+                <Label fx:id="itemIdLabel" styleClass="faint-text"/>
+
+                <!-- Titolo (solo in modifica) -->
+                <VBox fx:id="titleBox" spacing="4" visible="false" managed="false">
+                    <Label styleClass="field-label" text="%item.title"/>
+                    <TextField fx:id="titleField" styleClass="form-input"/>
+                </VBox>
+
+                <VBox spacing="4">
+                    <Label styleClass="field-label" text="%item.description"/>
+                    <TextArea fx:id="descriptionArea" styleClass="form-input" prefRowCount="5" wrapText="true" editable="false"/>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+
+        <!-- Footer -->
+        <HBox styleClass="dialog-footer" alignment="CENTER_LEFT" spacing="10">
+            <Button fx:id="deleteButton" styleClass="btn, btn-danger-outline" text="%item.delete" onAction="#onDelete"/>
+            <Button fx:id="cancelEditButton" styleClass="btn, btn-secondary" text="%item.cancelEdit" visible="false" managed="false" onAction="#onCancelEdit"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="editButton" styleClass="btn, btn-primary" text="%item.edit" onAction="#onEdit"/>
+            <Button fx:id="saveButton" styleClass="btn, btn-primary" text="%common.save" visible="false" managed="false" onAction="#onSave"/>
+        </HBox>
+    </VBox>
+</StackPane>

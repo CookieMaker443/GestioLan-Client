@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<!-- POPUP/PANNELLO: chat con l'assistente AI (laterale destro). I messaggi sono components/ChatMessage.fxml aggiunti a messageList. -->
+<VBox fx:id="root" styleClass="chat-panel" maxWidth="400" prefWidth="400"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="it.cookie.progetti.controllers.Dashboard.ChatPanelController">
+    <HBox styleClass="chat-header" alignment="CENTER_LEFT">
+        <Label styleClass="chat-title" text="%chat.title" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <Button fx:id="closeButton" styleClass="btn-close" text="×" onAction="#onClose">
+            <tooltip><javafx.scene.control.Tooltip text="%chat.close"/></tooltip>
+        </Button>
+    </HBox>
+    <ScrollPane fx:id="messageScroll" styleClass="chat-body-scroll" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+        <VBox fx:id="messageList" styleClass="chat-body" spacing="10"/>
+    </ScrollPane>
+    <HBox styleClass="chat-input-bar" alignment="CENTER" spacing="8">
+        <TextField fx:id="messageField" styleClass="form-input, chat-input" promptText="%chat.placeholder" HBox.hgrow="ALWAYS" onAction="#onSend"/>
+        <Button fx:id="sendButton" styleClass="btn, btn-primary, btn-pill" text="%chat.send" onAction="#onSend"/>
+    </HBox>
+</VBox>

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<!-- PAGINA: Dashboard (sidebar categorie + ricerca/filtri + griglia articoli + paginazione).
+     Le altre pagine (Settings, Profile, Credits, AdminPanel...) sono file separati e vengono caricati al posto di questo contenuto.
+     Il popup articolo (ItemDetailPopup) e i dialog si aggiungono da codice come ultimo figlio di `root` (overlay). -->
+
+<StackPane fx:id="root" prefHeight="720.0" prefWidth="1080.0" styleClass="dashboard-root" stylesheets="@../assets/css/base_theme/theme.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.cookie.progetti.controllers.Dashboard.DashboardController">
+
+    <HBox styleClass="dashboard-layout">
+
+        <!-- ============ SIDEBAR CATEGORIE ============ -->
+        <VBox fx:id="sidebar" maxWidth="264" minWidth="264" prefWidth="264" styleClass="sidebar">
+            <StackPane maxHeight="150" minHeight="150" prefHeight="150" styleClass="sidebar-logo-area">
+                <ImageView fitHeight="120.0" fitWidth="120.0" preserveRatio="true">
+                    <image>
+                        <Image url="@../../assets/images/logo.png" />
+                    </image>
+                </ImageView>
+            </StackPane>
+            <Label styleClass="sidebar-title" text="%dashboard.categories" />
+            <ScrollPane fx:id="categoryScroll" fitToWidth="true" hbarPolicy="NEVER" styleClass="sidebar-scroll" VBox.vgrow="ALWAYS">
+                <!-- popolato da codice con components/CategoryButton.fxml -->
+                <VBox fx:id="categoryList" spacing="2" styleClass="category-list" />
+            </ScrollPane>
+            <HBox spacing="8" styleClass="sidebar-footer">
+                <Button fx:id="newCategoryButton" maxWidth="Infinity" onAction="#onNewCategory" styleClass="btn, btn-primary" text="%dashboard.newCategory" HBox.hgrow="ALWAYS" />
+                <!-- testo con parametro: "Elimina ({0})" -> MessageFormat nel controller -->
+                <Button fx:id="deleteCategoriesButton" maxWidth="Infinity" onAction="#onDeleteCategories" styleClass="btn, btn-danger-outline" text="%dashboard.deleteCategories" HBox.hgrow="ALWAYS" />
+            </HBox>
+        </VBox>
+
+        <!-- ============ AREA PRINCIPALE ============ -->
+        <VBox fx:id="mainArea" minWidth="0" HBox.hgrow="ALWAYS">
+
+            <!-- Testata: titolo, avatar, ricerca, filtri -->
+            <VBox fx:id="topSection" spacing="16" styleClass="top-section">
+
+                <StackPane minHeight="44">
+                    <Label styleClass="app-title" text="%app.name" />
+                    <Button fx:id="avatarButton" onAction="#onToggleProfileMenu" styleClass="avatar-button" StackPane.alignment="CENTER_RIGHT">
+                        <graphic>
+                            <Group>
+                                <SVGPath content="M8 9a4 4 0 1 0 8 0a4 4 0 1 0-8 0 M4 21c1-4 4-6 8-6s7 2 8 6" styleClass="icon" />
+                            </Group>
+                        </graphic>
+                        <tooltip><Tooltip text="%dashboard.profileMenu" /></tooltip>
+                    </Button>
+                </StackPane>
+
+                <!-- Ricerca -->
+                <HBox alignment="CENTER" spacing="10">
+                    <TextField fx:id="searchField" maxWidth="640" onAction="#onSearch" promptText="%dashboard.searchByName" styleClass="form-input, search-field" HBox.hgrow="ALWAYS" />
+                    <HBox styleClass="segment-group">
+                        <ToggleButton fx:id="searchByNameToggle" selected="true" styleClass="segment-button" userData="name">
+                            <toggleGroup><ToggleGroup fx:id="searchModeGroup" /></toggleGroup>
+                            <graphic><SVGPath content="M5 19L12 5l7 14M8 14h8" styleClass="icon" /></graphic>
+                            <tooltip><Tooltip text="%dashboard.searchByNameTip" /></tooltip>
+                        </ToggleButton>
+                        <ToggleButton fx:id="searchByIdToggle" styleClass="segment-button" userData="id">
+                            <toggleGroup><fx:reference source="searchModeGroup" /></toggleGroup>
+                            <graphic><SVGPath content="M5 9h14M5 15h14M10 4L8 20M16 4l-2 16" styleClass="icon" /></graphic>
+                            <tooltip><Tooltip text="%dashboard.searchByIdTip" /></tooltip>
+                        </ToggleButton>
+                    </HBox>
+                </HBox>
+            <GridPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="720.0">
+              <columnConstraints>
+                  <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" percentWidth="33.33" />
+                <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" percentWidth="33.33" />
+                <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" percentWidth="33.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+   
+                       <!-- Colonna sinistra: filtro quantità -->
+                       <GridPane hgap="16" styleClass="filter-grid" vgap="12" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <columnConstraints>
+                               <ColumnConstraints maxWidth="190" minWidth="140" prefWidth="190" />
+                               <ColumnConstraints maxWidth="190" minWidth="140" prefWidth="190" />
+                           </columnConstraints>
+                           <CheckBox fx:id="quantityFilterCheck" text="%filter.byQuantity" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.valignment="BOTTOM" />
+                           <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                               <Label styleClass="field-label" text="%filter.quantity" />
+                               <TextField fx:id="quantityField" maxWidth="Infinity" styleClass="form-input" text="0" />
+                           </VBox>
+                           <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                               <Label styleClass="field-label" text="%filter.compare" />
+                               <!-- voci i18n: filter.compare.gt / filter.compare.lt (popolata dal controller) -->
+                               <ComboBox fx:id="compareCombo" maxWidth="Infinity" styleClass="form-input" />
+                           </VBox>
+                           <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                               <Label styleClass="field-label" text="%filter.unitType" />
+                               <!-- voce "Tutti i tipi" (filter.unit.all) + tipi di quantità dal backend (popolata dal controller) -->
+                               <ComboBox fx:id="unitTypeCombo" maxWidth="Infinity" styleClass="form-input" />
+                           </VBox>
+                     <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                     </rowConstraints>
+                     <GridPane.margin>
+                        <Insets left="10.0" />
+                     </GridPane.margin>
+                       </GridPane>
+   
+                       <Region maxWidth="1" minWidth="1" prefWidth="1" styleClass="vertical-divider" GridPane.columnIndex="2" />
+   
+                       <!-- Colonna centrale: filtri immagini / categorie -->
+                       <VBox alignment="CENTER_LEFT" spacing="12" styleClass="filter-segments" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <VBox spacing="4">
+                               <Label styleClass="field-label" text="%filter.images" />
+                               <HBox alignment="CENTER_LEFT" maxWidth="-Infinity" styleClass="segment-group">
+                                   <ToggleButton fx:id="imagesAllToggle" selected="true" styleClass="segment-button" userData="all">
+                               <toggleGroup>
+                                 <ToggleGroup fx:id="imageFilterGroup" />
+                              </toggleGroup>
+                                       <graphic>
+                                 <SVGPath content="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" styleClass="icon" />
+                              </graphic>
+                                       <tooltip>
+                                 <Tooltip text="%filter.images.all" />
+                              </tooltip>
+                                   </ToggleButton>
+                                   <ToggleButton fx:id="imagesWithToggle" styleClass="segment-button" userData="with">
+                               <toggleGroup>
+                                 <fx:reference source="imageFilterGroup" />
+                              </toggleGroup>
+                                       <graphic>
+                                 <SVGPath content="M3 5h18v14H3zM3 17l5-5 4 4 3-3 6 6M8.5 9.5h.01" styleClass="icon" />
+                              </graphic>
+                                       <tooltip>
+                                 <Tooltip text="%filter.images.with" />
+                              </tooltip>
+                                   </ToggleButton>
+                                   <ToggleButton fx:id="imagesWithoutToggle" styleClass="segment-button" userData="without">
+                               <toggleGroup>
+                                 <fx:reference source="imageFilterGroup" />
+                              </toggleGroup>
+                                       <graphic>
+                                 <SVGPath content="M3 5h18v14H3zM3 17l5-5 4 4 3-3 6 6M8.5 9.5h.01 M4 20L20 4" styleClass="icon" />
+                              </graphic>
+                                       <tooltip>
+                                 <Tooltip text="%filter.images.without" />
+                              </tooltip>
+                                   </ToggleButton>
+                               </HBox>
+                           </VBox>
+                           <VBox spacing="4">
+                               <Label styleClass="field-label" text="%filter.categories" />
+                               <HBox alignment="CENTER_LEFT" maxWidth="-Infinity" styleClass="segment-group">
+                                   <ToggleButton fx:id="categoriesAllToggle" selected="true" styleClass="segment-button" userData="all">
+                               <toggleGroup>
+                                 <ToggleGroup fx:id="categoryFilterGroup" />
+                              </toggleGroup>
+                                       <graphic>
+                                 <SVGPath content="M4 6h16M4 12h16M4 18h16" styleClass="icon" />
+                              </graphic>
+                                       <tooltip>
+                                 <Tooltip text="%filter.categories.all" />
+                              </tooltip>
+                                   </ToggleButton>
+                                   <ToggleButton fx:id="categoriesWithToggle" styleClass="segment-button" userData="with">
+                               <toggleGroup>
+                                 <fx:reference source="categoryFilterGroup" />
+                              </toggleGroup>
+                                       <graphic>
+                                 <SVGPath content="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z M7.5 7.5h.01" styleClass="icon" />
+                              </graphic>
+                                       <tooltip>
+                                 <Tooltip text="%filter.categories.with" />
+                              </tooltip>
+                                   </ToggleButton>
+                                   <ToggleButton fx:id="categoriesWithoutToggle" styleClass="segment-button" userData="without">
+                               <toggleGroup>
+                                 <fx:reference source="categoryFilterGroup" />
+                              </toggleGroup>
+                                       <graphic>
+                                 <SVGPath content="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z M7.5 7.5h.01 M4 20L20 4" styleClass="icon" />
+                              </graphic>
+                                       <tooltip>
+                                 <Tooltip text="%filter.categories.without" />
+                              </tooltip>
+                                   </ToggleButton>
+                               </HBox>
+                           </VBox>
+                       </VBox>
+   
+                       <Region maxWidth="1" minWidth="1" prefWidth="1" styleClass="vertical-divider" GridPane.columnIndex="2" />
+   
+                       <!-- Colonna destra: azioni.
+                            In modalità "elimina" il controller cambia testo/stile: addButton -> "Elimina ({0})" (btn-danger), deleteButton -> "Annulla" -->
+                       <GridPane alignment="CENTER" hgap="8" styleClass="action-grid" vgap="12" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <columnConstraints>
+                               <ColumnConstraints maxWidth="132" minWidth="132" prefWidth="132" />
+                               <ColumnConstraints maxWidth="132" minWidth="132" prefWidth="132" />
+                           </columnConstraints>
+                           <Button fx:id="resetButton" maxWidth="Infinity" onAction="#onReset" styleClass="btn, btn-secondary" text="%filter.reset" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                           <Button fx:id="searchButton" maxWidth="Infinity" onAction="#onSearch" styleClass="btn, btn-primary" text="%filter.search" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                           <Button fx:id="addButton" maxWidth="Infinity" onAction="#onAddOrConfirmDelete" styleClass="btn, btn-accent-outline" text="%dashboard.add" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                           <Button fx:id="deleteButton" maxWidth="Infinity" onAction="#onDeleteOrCancel" styleClass="btn, btn-danger-outline" text="%dashboard.delete" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                     </rowConstraints>
+                     <GridPane.margin>
+                        <Insets right="10.0" />
+                     </GridPane.margin>
+                       </GridPane>
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </GridPane>
+            </VBox>
+
+            <!-- Griglia articoli -->
+            <VBox styleClass="items-section" VBox.vgrow="ALWAYS">
+                <Label fx:id="selectionHintLabel" managed="false" styleClass="hint-text" text="%dashboard.selectionHint" visible="false" wrapText="true" />
+                <ScrollPane fx:id="itemScroll" fitToWidth="true" hbarPolicy="NEVER" styleClass="items-scroll" VBox.vgrow="ALWAYS">
+                    <StackPane alignment="TOP_LEFT" styleClass="items-container">
+                        <Label fx:id="noItemsLabel" managed="false" styleClass="empty-text" text="%dashboard.noItems" visible="false" StackPane.alignment="TOP_CENTER" />
+                        <!-- popolato da codice con components/ItemCard.fxml -->
+                        <FlowPane fx:id="itemGrid" hgap="18" styleClass="item-grid" vgap="18" />
+                    </StackPane>
+                </ScrollPane>
+
+                <!-- Barra di paginazione. rangeLabel -> "{0}–{1} di {2} articoli"; pageLabel -> "Pagina {0} di {1}" -->
+                <HBox fx:id="paginationBar" alignment="CENTER_LEFT" spacing="12" styleClass="pagination-bar">
+                    <Label fx:id="rangeLabel" maxWidth="Infinity" styleClass="pagination-label" HBox.hgrow="ALWAYS" />
+                    <HBox alignment="CENTER" spacing="8">
+                        <Button fx:id="firstPageButton" onAction="#onFirstPage" styleClass="btn-icon">
+                            <graphic><SVGPath content="M11 17l-5-5 5-5M18 17l-5-5 5-5" styleClass="icon" /></graphic>
+                            <tooltip><Tooltip text="%pagination.first" /></tooltip>
+                        </Button>
+                        <Button fx:id="prevPageButton" onAction="#onPrevPage" styleClass="btn-icon">
+                            <graphic><SVGPath content="M15 18l-6-6 6-6" styleClass="icon" /></graphic>
+                            <tooltip><Tooltip text="%pagination.prev" /></tooltip>
+                        </Button>
+                        <Label fx:id="pageLabel" alignment="CENTER" minWidth="110" styleClass="page-label" />
+                        <Button fx:id="nextPageButton" onAction="#onNextPage" styleClass="btn-icon">
+                            <graphic><SVGPath content="M9 18l6-6-6-6" styleClass="icon" /></graphic>
+                            <tooltip><Tooltip text="%pagination.next" /></tooltip>
+                        </Button>
+                        <Button fx:id="lastPageButton" onAction="#onLastPage" styleClass="btn-icon">
+                            <graphic><SVGPath content="M13 17l5-5-5-5M6 17l5-5-5-5" styleClass="icon" /></graphic>
+                            <tooltip><Tooltip text="%pagination.last" /></tooltip>
+                        </Button>
+                    </HBox>
+                    <Region HBox.hgrow="ALWAYS" />
+                </HBox>
+            </VBox>
+        </VBox>
+    </HBox>
+
+    <!-- ============ OVERLAY: pannello chat assistente ============ -->
+    <fx:include fx:id="chatPanel" managed="false" source="ChatPanel.fxml" visible="false" StackPane.alignment="CENTER_RIGHT" />
+
+                      <!-- ============ OVERLAY: menu profilo (si apre sotto l'avatar) ============ -->
+    <fx:include fx:id="profileMenu" managed="false" source="ProfileMenu.fxml" translateX="-28" translateY="72" visible="false" StackPane.alignment="TOP_RIGHT" />
+
+    <!-- ============ Pulsante flottante chat ============ -->
+    <Button fx:id="chatFab" onAction="#onOpenChat" styleClass="chat-fab" StackPane.alignment="BOTTOM_RIGHT">
+        <StackPane.margin>
+            <Insets bottom="24" right="24" />
+        </StackPane.margin>
+        <graphic>
+            <SVGPath content="M4 5h16v11H10l-5 4v-4H4z" styleClass="icon, icon-fab" />
+        </graphic>
+        <tooltip><Tooltip text="%chat.open" /></tooltip>
+    </Button>
+</StackPane>

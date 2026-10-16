@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<!--
+  COMPONENTE: card di un articolo nella griglia della dashboard (una istanza per articolo, creata da codice).
+  Stato "selezionato" (modalità elimina): il controller aggiunge/rimuove la styleClass "selected" su `card`
+  e mostra/nasconde selectedLabel.
+  Pallini categoria: il controller aggiunge in categoryDots una Region con styleClass "category-dot"
+  e imposta il colore con setStyle("-fx-background-color: #RRGGBB").
+-->
+<VBox fx:id="card" styleClass="item-card" prefWidth="220" minWidth="200" onMouseClicked="#onCardClicked"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.gestiolan.controller.components.ItemCardController">
+
+    <StackPane styleClass="item-card-image-area" prefHeight="150" minHeight="150" maxHeight="150">
+        <ImageView fx:id="itemImage" fitHeight="150" fitWidth="220" preserveRatio="true" visible="false" managed="false"/>
+        <Label fx:id="noImageLabel" styleClass="item-card-no-image" text="%item.noImage"/>
+    </StackPane>
+
+    <VBox styleClass="item-card-body" spacing="4">
+        <Label fx:id="nameLabel" styleClass="item-card-name"/>
+
+        <HBox alignment="CENTER_LEFT" spacing="6">
+            <Label styleClass="item-card-label" text="%item.categories"/>
+            <FlowPane fx:id="categoryDots" hgap="6" vgap="4" HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <HBox alignment="CENTER_LEFT" spacing="6">
+            <Label styleClass="item-card-label-large" text="%item.quantity"/>
+            <fx:include fx:id="unitBadge" source="UnitBadge.fxml"/>
+            <Label fx:id="quantityLabel" styleClass="item-card-quantity"/>
+        </HBox>
+
+        <Label fx:id="selectedLabel" styleClass="item-card-selected" text="%item.selected" visible="false" managed="false"/>
+    </VBox>
+</VBox>

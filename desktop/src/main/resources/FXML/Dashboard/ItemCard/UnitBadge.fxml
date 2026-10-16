@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.SVGPath?>
+
+<!--
+  COMPONENTE: badge del tipo di quantità.
+  Mostra l'icona "scatola" (quando il simbolo è vuoto = "Articoli") oppure il simbolo testuale/emoji (g, kg, 📦 ...).
+  Taglie: default 24px | + styleClass "unit-badge-md" 34px | + "unit-badge-lg" 44px  (si aggiunge su <fx:include styleClass="...">)
+  Usato in: ItemCard, ItemDetailPopup, UnitOption, UnitSymbolCard.
+  Controller: setSymbol(String) -> se vuoto mostra boxIcon, altrimenti symbolLabel.
+-->
+<StackPane fx:id="badge" styleClass="unit-badge" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.gestiolan.controller.components.UnitBadgeController">
+    <Group fx:id="boxIcon">
+        <SVGPath styleClass="icon, unit-icon" content="M3 8l9-5 9 5v9l-9 5-9-5z M3 8l9 5 9-5 M12 13v9"/>
+    </Group>
+    <Label fx:id="symbolLabel" styleClass="unit-badge-text" visible="false" managed="false"/>
+</StackPane>

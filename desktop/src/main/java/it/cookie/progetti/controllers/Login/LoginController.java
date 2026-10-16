@@ -80,8 +80,8 @@ public class LoginController implements Observer{
             if (state instanceof user) {
                 SceneManager.getInstance()
                     .loadScene((Stage)loginButton.getScene().getWindow(), 
-                        SceneManager.SceneKeys.MAIN_MENU_VIEW, 
-                        bundle.getString("menu.TITLE"), 1500, 750);    
+                        SceneManager.SceneKeys.DASHBOARD_VIEW, 
+                        bundle.getString("app.title"), 1500, 750);    
             } 
             else if (state instanceof MessageText error) {
                 // errore noto -> traduci dal bundle; errore non previsto -> messaggio grezzo della JVM
