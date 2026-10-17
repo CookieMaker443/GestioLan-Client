@@ -1,26 +1,27 @@
 package it.cookie.progetti.managers;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
 
+import it.cookie.utils.config.AppPaths;
 import it.cookie.utils.network.managers.NetworkManager;
-import javafx.scene.control.Alert.AlertType;
 
 public class SettingsManager {
     private static SettingsManager instance;
     private final Properties props = new Properties();
-    
-    // path dei salvataggi nel filesystem
-    private static final String BASE_DIR = getBasePath();
 
-    public static final String SETTINGS_FILE = BASE_DIR + "/settings.properties";
-    public static final String LOGS_DIR     = BASE_DIR + "/saved_logs";
-    public static final String CSS_DIR = BASE_DIR + "/themes";
-    public static final String CACHE_DIR = BASE_DIR + "/cache";
-    public static final String DEFAULT_CSS = CSS_DIR + "/default.css";
+    // path (restano String per non rompere il resto del codice)
+    public static final String LOGS_DIR  = AppPaths.dir("saved_logs").toString();
+    public static final String CSS_DIR   = AppPaths.dir("themes").toString();
+    public static final String CACHE_DIR = AppPaths.dir("cache").toString();
+    public static final String DEFAULT_CSS = CSS_DIR + "/default_theme/theme.css";
+
+    public static final Path SETTINGS_FILE = AppPaths.settingsFile("settings.properties");
+    public static final Path SERVER_FILE   = AppPaths.settingsFile("server.properties");
 
     // chiave per la versione http da usare (1.1 o 2)
     private static final String KEY_HTTP_VERSION = "httpVersion";
@@ -30,12 +31,10 @@ public class SettingsManager {
     private static final String KEY_LANGUAGE = "language";
     private static final String KEY_LAST_URL = "lastUrl";
     private static final String KEY_THEME = "theme";
-    private static final String DEFAULT_THEME = "default.css";
-    private static final String SERVER_IP = "server.ip";
-    private static final String SERVER_PORT = "server.port";
+    private static final String DEFAULT_THEME = "default_theme/theme.css";
 
     // default
-    private static final String DEFAULT_LANGUAGE = "en";
+    private static final String DEFAULT_LANGUAGE = "it";
     private static final String DEFAULT_LAST_URL = "";
 
     // sessione corrente — sopravvive al reload della scena
@@ -48,46 +47,23 @@ public class SettingsManager {
 
     private SettingsManager() {
         load();
-        NetworkManager.getInstance().init(SETTINGS_FILE);
+        NetworkManager.getInstance().init(SERVER_FILE);
     }
-
-    // Detect dell'os
-    private static String getBasePath() {
-        String os = System.getProperty("os.name").toLowerCase();
-        String dir;
-        if (os.contains("win")) {
-            dir = System.getenv("APPDATA") + "/gestiolan";
-        } else {
-            dir = System.getProperty("user.home") + "/.config/gestiolan";
-        }
-        // crea tutte le cartelle se non esistono
-        new File(dir).mkdirs();
-        new File(dir + "/cache").mkdirs();
-        new File(dir + "/saved_logs").mkdirs();
-        new File(dir + "/themes").mkdirs();
-        return dir;
-    }
-
-    // --- LOAD / SAVE ---
 
     private void load() {
-        try (FileInputStream fis = new FileInputStream(SETTINGS_FILE)) {
-            props.load(fis);
+        try (InputStream in = Files.newInputStream(SETTINGS_FILE)) {
+            props.load(in);
         } catch (IOException e) {
-            // file non esiste ancora, usiamo i default
             props.setProperty(KEY_LANGUAGE, DEFAULT_LANGUAGE);
             props.setProperty(KEY_LAST_URL, DEFAULT_LAST_URL);
         }
     }
 
     private void save() {
-        try (FileOutputStream fos = new FileOutputStream(SETTINGS_FILE)) {
-            props.store(fos, "GestioLan Settings");
+        try (OutputStream out = Files.newOutputStream(SETTINGS_FILE)) {
+            props.store(out, "GestioLan Settings");
         } catch (IOException e) {
-            SceneManager.getInstance().showAlert(
-                LanguageManager.getInstance().getBundle().getString("alert.errorTitle"),
-                LanguageManager.getInstance().getBundle().getString("alert.errorSaveSettings") + " " + e.getMessage(),
-                AlertType.ERROR);
+            // vedi nota sotto
         }
     }
 
@@ -115,7 +91,7 @@ public class SettingsManager {
 
     // GETTER / SETTER per la configurazione del server con NetworkManager
     public void setServerConfig(String ip, int port) {
-        NetworkManager.getInstance().saveConfig(SETTINGS_FILE, ip, port);
+        NetworkManager.getInstance().saveConfig(ip, port);
     }
 
     public String getServerIp() {

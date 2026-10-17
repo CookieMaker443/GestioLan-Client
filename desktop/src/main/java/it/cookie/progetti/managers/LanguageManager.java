@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 public class LanguageManager {
     private static LanguageManager instance;
     private ResourceBundle bundle;
+    private SupportedLanguage current;
 
     public enum SupportedLanguage {
         /*GERMAN("de", "de-DE"),
@@ -45,14 +46,17 @@ public class LanguageManager {
     }
 
     public final void load(String langCode) {
-        SupportedLanguage lang = SupportedLanguage.fromCode(langCode);
-        Locale locale = Locale.forLanguageTag(lang.getTag());
+        current = SupportedLanguage.fromCode(langCode);
+        Locale locale = Locale.forLanguageTag(current.getTag());
         bundle = ResourceBundle.getBundle("i18n.language", locale);
+
+        System.out.println("Richiesto: " + langCode + " -> " + current
+        + " | bundle locale: '" + bundle.getLocale() + "'");
     }
 
     public ResourceBundle getBundle() { return bundle; }
 
     public SupportedLanguage getCurrentLanguage() {
-        return SupportedLanguage.fromCode(SettingsManager.getInstance().getLanguage());
+        return current;
     }
 }
