@@ -1,9 +1,8 @@
 package it.cookie.progetti.controllers.Login;
 
 import java.io.IOException;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
+import it.cookie.progetti.managers.LanguageManager;
 import it.cookie.progetti.managers.SceneManager;
 import it.cookie.utils.interfaces.observer.Observer;
 import it.cookie.utils.interfaces.observer.Subject;
@@ -20,8 +19,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class LoginController implements Observer{
-    Locale locale = Locale.forLanguageTag("it-IT");
-    ResourceBundle bundle = ResourceBundle.getBundle("i18n.language", locale);
     UserNetController userNetController = new UserNetController();
 
     @FXML
@@ -38,7 +35,7 @@ public class LoginController implements Observer{
 ;
     @FXML
     public void initialize() {
-        System.out.println("LoginController inizializzato: collego i componenti...");
+        System.out.println("LoginController initialized: connecting components...");
         
         // Colleghiamo la rete al SessionManager
         userNetController.Attach(SessionManager.getInstance());
@@ -49,7 +46,7 @@ public class LoginController implements Observer{
     private void handleLoginButtonAction() throws IOException {
         if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
             System.out.println("Username or Password is empty!");
-            SceneManager.getInstance().showAlert(bundle.getString("login.Warning"), bundle.getString("login.MISSING_FIELDS"), AlertType.WARNING);
+            SceneManager.getInstance().showAlert(LanguageManager.getInstance().getBundle().getString("login.Warning"), LanguageManager.getInstance().getBundle().getString("login.MISSING_FIELDS"), AlertType.WARNING);
             
             return;
         }
@@ -73,26 +70,26 @@ public class LoginController implements Observer{
     public void Update(Subject subject, Object state) {
         javafx.application.Platform.runLater(() -> {
             // Disabilitato l'ascolto per evitare doppie chiamate istantanee
-            System.out.println("LoginController ha ricevuto Update dal SessionManager.");
+            System.out.println("LoginController updated by SessionManager.");
             SessionManager.getInstance().Detach(this);
             loginButton.setDisable(false);
 
             if (state instanceof user) {
                 SceneManager.getInstance()
                     .loadScene((Stage)loginButton.getScene().getWindow(), 
-                        SceneManager.SceneKeys.MAIN_MENU_VIEW, 
-                        bundle.getString("menu.TITLE"), 1500, 750);    
+                        SceneManager.SceneKeys.DASHBOARD_VIEW, 
+                        LanguageManager.getInstance().getBundle().getString("app.title"), 1500, 750);    
             } 
             else if (state instanceof MessageText error) {
                 // errore noto -> traduci dal bundle; errore non previsto -> messaggio grezzo della JVM
                 String message = error.isKnown()
-                    ? bundle.getString(error.bundleKey())
+                    ? LanguageManager.getInstance().getBundle().getString(error.bundleKey())
                     : error.rawMessage();
-                SceneManager.getInstance().showAlert(bundle.getString("login.Error"), message, AlertType.ERROR);
+                SceneManager.getInstance().showAlert(LanguageManager.getInstance().getBundle().getString("login.Error"), message, AlertType.ERROR);
             } else {
                 // rete di sicurezza: non dovrebbe mai capitare, dato che ogni percorso
                 // di errore in UserNetController passa da un LoginError
-                SceneManager.getInstance().showAlert(bundle.getString("login.Error"), bundle.getString("login.CONNECTION_ERROR"), AlertType.ERROR);
+                SceneManager.getInstance().showAlert(LanguageManager.getInstance().getBundle().getString("login.Error"), LanguageManager.getInstance().getBundle().getString("login.CONNECTION_ERROR"), AlertType.ERROR);
             }
 
         });
@@ -102,6 +99,6 @@ public class LoginController implements Observer{
     @SuppressWarnings("unused")
     private void handleChangeServerButton(ActionEvent event) throws IOException {
         SceneManager.getInstance().loadPopupScene(event, SceneManager.SceneKeys.SERVER_CONFIG_POPUP, 
-            bundle.getString("serverchange.title"), 500, 300);
+            LanguageManager.getInstance().getBundle().getString("serverchange.title"), 500, 300);
     }
 }

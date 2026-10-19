@@ -1,15 +1,11 @@
 package it.cookie.progetti.managers;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import it.cookie.progetti.managers.ThemeManager.ThemeManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -23,15 +19,14 @@ import javafx.stage.Stage;
 public class SceneManager {
     private static SceneManager istance;
     private Map<String, String> FXML_SCENES = new HashMap<>();
-    Locale locale = Locale.forLanguageTag("it-IT");
-    ResourceBundle langBundle = ResourceBundle.getBundle("i18n.language", locale);
+    
     ResourceBundle sceneBundle;
     FXMLLoader loader;
 
     public enum SceneKeys {
         LOGIN_VIEW("LoginView"),
-        MAIN_MENU_VIEW("MainMenuView"),
         SERVER_CONFIG_POPUP("ServerConfigView"),
+        DASHBOARD_VIEW("DashboardView"),
         ITEM_CARD("ItemCard");
 
         private final String key;
@@ -72,7 +67,7 @@ public class SceneManager {
     public void loadScene(Stage stage, SceneKeys sceneKey, String title, double minWidth, double minHeight) {
         try {
             // prende la scena passarta come parametro e la carica
-            loader = new FXMLLoader(getClass().getResource(FXML_SCENES.get(sceneKey.getKey())), langBundle);
+            loader = new FXMLLoader(getClass().getResource(FXML_SCENES.get(sceneKey.getKey())), LanguageManager.getInstance().getBundle());
             
             // Carica il file FXML
             Parent root = loader.load();
@@ -82,21 +77,25 @@ public class SceneManager {
             stage.setMinWidth(minWidth);
             stage.setMinHeight(minHeight);
 
+            // Applica il tema alla scena
+            ThemeManager.getInstance().apply(scene);
+
+            // Imposta il titolo della finestra
             stage.setTitle(title);
             stage.setScene(scene);
             
             // mette lo stage al centro dello schermo
             stage.centerOnScreen();
 
-            System.out.println("Caricata scena: " + sceneKey.getKey());
+            System.out.println("Loaded scene: " + sceneKey.getKey());
             stage.show();
             
         } catch (Exception e) {
-            // e.printStackTrace();
+             e.printStackTrace();
             //showAlert("Error", "Unable to load the scene: " + sceneKey.getKey(), AlertType.ERROR);
             showAlert(LanguageManager.getInstance().getBundle().getString("alert.errorTitle"),
                 LanguageManager.getInstance().getBundle().getString("alert.errorLoadScene") + " " + sceneKey.getKey(), AlertType.ERROR);
-            System.out.println("Errore nel caricamento della scena: " + sceneKey.getKey());
+            System.out.println("Error during loading scene: " + sceneKey.getKey());
         }
     }
 
@@ -119,10 +118,13 @@ public class SceneManager {
 
             popupStage.setMinWidth(minWidth);   // Impedisce alla finestra di stringersi troppo
             popupStage.setMinHeight(minHeight); // Impedisce alla finestra di abbassarsi troppo
-            
+
             popupStage.setTitle(title);
 
             Scene popupScene = new Scene(root, minWidth, minHeight);
+
+            // Applica il tema alla scena
+            ThemeManager.getInstance().apply(popupStage.getScene());
 
             popupStage.setScene(popupScene);
 
@@ -131,9 +133,9 @@ public class SceneManager {
             double centerY = primaryStage.getY() + primaryStage.getHeight() / 2;
 
             popupStage.setX(centerX - minWidth / 2);
-            popupStage.setY(centerY - minHeight / 2);
+             popupStage.setY(centerY - minHeight / 2);
 
-            System.out.println("Caricata scena popup: " + sceneKey.getKey());
+            System.out.println("Loaded popup scene: " + sceneKey.getKey());
             popupStage.showAndWait();
             
         } catch (Exception e) {
@@ -141,7 +143,7 @@ public class SceneManager {
             //showAlert("Error", "Unable to load the scene: " + sceneKey.getKey(), AlertType.ERROR);
             showAlert(LanguageManager.getInstance().getBundle().getString("alert.errorTitle"),
                 LanguageManager.getInstance().getBundle().getString("alert.errorLoadScene") + " " + sceneKey.getKey(), AlertType.ERROR);
-            System.out.println("Errore nel caricamento della scena: " + sceneKey.getKey());
+            System.out.println("Error during loading popup scene: " + sceneKey.getKey());
         }
     }
 
@@ -150,37 +152,12 @@ public class SceneManager {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
+
+        // Applica il tema all'alert
+        ThemeManager.getInstance().apply(alert.getDialogPane().getScene());
+
         alert.showAndWait();
     }
 
-    // Applica il tema alla scena
-    private void applyTheme(Scene scene) {
-        File externalCss = new File(SettingsManager.CSS_DIR + "/" + SettingsManager.getInstance().getTheme());
-        
-        if (externalCss.exists()) {
-            scene.getStylesheets().add(externalCss.toURI().toString());
-        } else {
-            // fallback al CSS interno nel jar — non può mai mancare
-            String internalCss = getClass()
-                .getResource("/css/default.css")
-                .toExternalForm();
-            scene.getStylesheets().add(internalCss);
-            System.out.println("[WARN] Tema non trovato, uso il default interno");
-        }
-    }
 
-    private void copyDefaultThemeIfMissing() {
-        File defaultCss = new File(SettingsManager.CSS_DIR + "/default.css");
-        if (defaultCss.exists()) return;
-        
-        try (InputStream in = getClass()
-                .getResourceAsStream("/css/default.css")) {
-            if (in != null) {
-                Files.copy(in, defaultCss.toPath());
-                System.out.println("Tema default copiato in: " + defaultCss.getAbsolutePath());
-            }
-        } catch (IOException e) {
-            System.out.println("Errore copia tema: " + e.getMessage());
-        }
-    }
 }

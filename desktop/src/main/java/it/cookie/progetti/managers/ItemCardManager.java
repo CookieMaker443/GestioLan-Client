@@ -3,7 +3,7 @@ package it.cookie.progetti.managers;
 import java.io.IOException;
 import java.util.List;
 
-import it.cookie.progetti.controllers.MainMenu.Containers.ItemCardController;
+import it.cookie.progetti.controllers.Dashboard.Containers.ItemCardController;
 import it.cookie.progetti.managers.SceneManager.SceneKeys;
 import it.cookie.utils.interfaces.observer.Observer;
 import it.cookie.utils.interfaces.observer.Subject;

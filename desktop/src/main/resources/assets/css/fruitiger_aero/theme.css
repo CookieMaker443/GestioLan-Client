@@ -1,0 +1,30 @@
+/* si applica SOPRA default_theme: basta ridefinire ciò che cambia */
+.root {
+    -gl-accent: #1E90D8;
+    -gl-accent2: #8BE04E;
+}
+
+.dashboard-root {
+    /* il colore di sfondo del tema base resta sotto l'immagine */
+    -fx-background-image: url("dashbpard_bg.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+/* per far vedere lo sfondo i pannelli devono essere semitrasparenti */
+.sidebar, .top-section { -fx-background-color: rgba(255,255,255,0.55); }
+.item-card {
+    -fx-background-color: rgba(255,255,255,0.70);
+    -fx-border-color: rgba(255,255,255,0.90);
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+}
+
+/* bottoni più bombati, effetto "gel" */
+.btn { -fx-background-radius: 22; -fx-border-radius: 22; }
+.btn-primary {
+    -fx-background-color: linear-gradient(to bottom, #6FD0FF, #1E90D8);
+    -fx-border-color: rgba(255,255,255,0.8);
+    -fx-effect: dropshadow(gaussian, rgba(0,80,140,0.35), 8, 0, 0, 2);
+}
