@@ -25,7 +25,10 @@ public class ThemeManager {
     private static final String BUILTIN_DIR = "/assets/css/";
 
     // dentro un jar non si può elencare una cartella: i temi inclusi vanno dichiarati qui
-    private static final List<String> BUILTIN = List.of("default_theme");
+    private static final List<String> BUILTIN = List.of(
+        "default_theme",
+        "mono",
+        "fruitiger_aero");
     private static final String BASE = "default_theme";
     private static final String MANIFEST = "theme.json";
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -119,11 +122,17 @@ public class ThemeManager {
         // prende il CSS del tema base (default_theme) e quello del tema scelto (se valido)
         String base = find(BASE).orElseThrow().cssUrl();
 
+        System.out.println("Applying theme: " + id + " (base: " + base + ")");
+
         // se il tema scelto non è valido o è il base, ritorna solo il base
-        return find(id)
+        List<String> finalTheme = find(id)
                 .filter(t -> !BASE.equals(t.id()))
                 .map(t -> List.of(base, t.cssUrl()))
                 .orElse(List.of(base));    // tema mancante o non valido -> solo base
+        
+        System.out.println("Final theme CSS URLs: " + finalTheme);
+        
+        return finalTheme;
     }
 
     public void apply(Scene scene) {
@@ -147,6 +156,7 @@ public class ThemeManager {
         scenes.removeIf(r -> r.get() == null);
         if (scenes.stream().noneMatch(r -> r.get() == scene)) {
             scenes.add(new WeakReference<>(scene));
+            System.out.println("Scene registered for theme updates: " + scene);
         }
     }
 

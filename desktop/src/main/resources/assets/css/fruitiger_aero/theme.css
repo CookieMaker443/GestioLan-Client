@@ -6,7 +6,7 @@
 
 .dashboard-root {
     /* il colore di sfondo del tema base resta sotto l'immagine */
-    -fx-background-image: url("dashboard_bg.jpg");
+    -fx-background-image: url("dashbpard_bg.jpg");
     -fx-background-size: cover;
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
