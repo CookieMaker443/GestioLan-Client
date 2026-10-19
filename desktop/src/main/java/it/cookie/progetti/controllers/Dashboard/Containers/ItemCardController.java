@@ -1,4 +1,4 @@
-package it.cookie.progetti.controllers.MainMenu.Containers;
+package it.cookie.progetti.controllers.Dashboard.Containers;
 
 import it.cookie.utils.network.item.Item;
 import javafx.fxml.FXML;
