@@ -1,0 +1,22 @@
+/* Tema "Monocromo" - si applica SOPRA default_theme: ridefinisce solo la palette. */
+.root {
+    -gl-bg: #F1F1F1;
+    -gl-surface: #FFFFFF;
+    -gl-soft: #E4E4E4;
+    -gl-soft2: #F7F7F7;
+    -gl-ink: #111111;
+    -gl-muted: #555555;
+    -gl-line: #D2D2D2;
+    -gl-line2: #A6A6A6;
+    -gl-accent: #2B2B2B;
+    -gl-onaccent: #FFFFFF;
+    -gl-accent2: #8C8C8C;
+    -gl-onaccent2: #111111;
+    -gl-danger: #B3261E;
+    -gl-dangerbg: #EEEEEE;
+    -gl-dangerbg2: #F4F4F4;
+    -gl-hl: #E6E6E6;
+    -gl-avatar: #DADADA;
+    -gl-iconmuted: #777777;
+    -gl-faint: #666666;
+}
