@@ -16,9 +16,7 @@ public class SettingsManager {
 
     // path (restano String per non rompere il resto del codice)
     public static final String LOGS_DIR  = AppPaths.dir("saved_logs").toString();
-    public static final String CSS_DIR   = AppPaths.dir("themes").toString();
     public static final String CACHE_DIR = AppPaths.dir("cache").toString();
-    public static final String DEFAULT_CSS = CSS_DIR + "/default_theme/theme.css";
 
     public static final Path SETTINGS_FILE = AppPaths.settingsFile("settings.properties");
     public static final Path SERVER_FILE   = AppPaths.settingsFile("server.properties");
@@ -31,7 +29,7 @@ public class SettingsManager {
     private static final String KEY_LANGUAGE = "language";
     private static final String KEY_LAST_URL = "lastUrl";
     private static final String KEY_THEME = "theme";
-    private static final String DEFAULT_THEME = "default_theme/theme.css";
+    private static final String DEFAULT_THEME = "default_theme";
 
     // default
     private static final String DEFAULT_LANGUAGE = "it";
