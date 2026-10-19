@@ -1,5 +1,6 @@
 package it.cookie.progetti.controllers.Dashboard;
 
+import it.cookie.progetti.managers.ThemeManager.ThemeManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -177,28 +178,71 @@ public class DashboardController {
     private void initialize() {
         // Hint: initialize() will be called when the associated FXML has been completely loaded.
         // istanzia ItemCardManager
+        
+        // Imposta la visibilità dei pannelli esterni (chat e menu profilo) in base alla loro proprietà "visible"
+        chatPanel.managedProperty().bind(chatPanel.visibleProperty());
+        profileMenu.managedProperty().bind(profileMenu.visibleProperty());
 
+        // Imposta la callback per la chiusura del pannello chat
+        chatPanelController.setOnCloseRequested(this::onOpenChat);
     }
 
     // ====== Sidebar categorie ======
-@FXML private void onNewCategory() { }
-@FXML private void onDeleteCategories() { }
+    @FXML private void onNewCategory() { 
+        // Controlla se sei un admin prima di aprire il popup per la creazione di una nuova categoria
+    }
+    @FXML private void onDeleteCategories() { }
 
-// ====== Testata / ricerca / filtri ======
-@FXML private void onToggleProfileMenu() { }
-@FXML private void onSearch() { }
-@FXML private void onReset() { }
-@FXML private void onAddOrConfirmDelete() { }
-@FXML private void onDeleteOrCancel() { }
+    // ====== Testata / ricerca / filtri ======
+    @FXML private void onToggleProfileMenu() { profileMenu.setVisible(!profileMenu.isVisible()); }
+    @FXML private void onSearch() { ThemeManager.getInstance().setTheme("mono"); }
 
-// ====== Paginazione ======
-@FXML private void onFirstPage() { }
-@FXML private void onPrevPage() { }
-@FXML private void onNextPage() { }
-@FXML private void onLastPage() { }
+    @FXML private void onReset() { 
+        // Filtri immagini e categorie -> "tutti gli articoli"
+        imagesAllToggle.setSelected(true);
+        categoriesAllToggle.setSelected(true);
 
-// ====== Chat ======
-@FXML private void onOpenChat() { }
+        // Filtro quantità: checkbox spenta, quantità a 0, confronto e tipo senza valore
+        quantityFilterCheck.setSelected(false);
+        quantityField.setText("0");
+        compareCombo.getSelectionModel().clearSelection();
+        unitTypeCombo.getSelectionModel().clearSelection();
+
+        // Barra di ricerca pulita
+        searchField.clear();
+
+        // TODO: deselezionare le categorie scelte nella sidebar
+
+        // TODO: rilanciare la ricerca con i filtri azzerati (es. onSearch() / reload pagina 1)
+
+    }  
+
+    @FXML private void onAddOrConfirmDelete() { }
+    @FXML private void onDeleteOrCancel() { }
+
+    // ====== Paginazione ======
+    @FXML private void onFirstPage() { }
+    @FXML private void onPrevPage() { }
+    @FXML private void onNextPage() { }
+    @FXML private void onLastPage() { }
+
+    // ====== Chat ======
+    @FXML private void onOpenChat() { 
+        setChatOpen(!chatPanel.isVisible());
+    }
+
+    private void setChatOpen(boolean open) {
+        //se la chat è chiusa e il pannello delle impostazioni è aperto, chiudi il pannello delle impostazioni
+        if (open && profileMenu.isVisible()) {
+            profileMenu.setVisible(false);
+        }
+
+        // imposta la visibilità del pannello della chat e sposta il FAB di conseguenza
+        chatPanel.setVisible(open);
+
+        // sposta il FAB di 400px a sinistra se la chat è aperta, altrimenti lo riporta a destra
+        chatFab.setTranslateX(open ? -400 : 0);
+    }
 
 
 }

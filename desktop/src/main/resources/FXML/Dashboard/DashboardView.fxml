@@ -277,7 +277,7 @@
     </HBox>
 
     <!-- ============ OVERLAY: pannello chat assistente ============ -->
-    <fx:include fx:id="chatPanel" managed="false" source="ChatPanel.fxml" visible="false" StackPane.alignment="CENTER_RIGHT" />
+    <fx:include fx:id="chatPanel" source="ChatPanel.fxml" visible="false" StackPane.alignment="CENTER_RIGHT" />
 
                       <!-- ============ OVERLAY: menu profilo (si apre sotto l'avatar) ============ -->
     <fx:include fx:id="profileMenu" managed="false" source="ProfileMenu.fxml" translateX="-28" translateY="72" visible="false" StackPane.alignment="TOP_RIGHT" />

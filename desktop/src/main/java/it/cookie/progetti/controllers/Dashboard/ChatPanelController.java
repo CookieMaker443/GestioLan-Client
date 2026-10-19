@@ -14,10 +14,22 @@ public class ChatPanelController {
     @FXML private TextField messageField;
     @FXML private Button sendButton;
 
+    private Runnable onCloseRequested;      // Callback per gestire la chiusura del pannello chat
+
+    public void setOnCloseRequested(Runnable r) {
+        this.onCloseRequested = r;
+    }
+
     @FXML
     private void initialize() {
     }
 
-    @FXML private void onClose() { }
+
+    @FXML private void onClose() { 
+        // Esegui la callback per chiudere il pannello chat
+        if (onCloseRequested != null) onCloseRequested.run();
+    }
+    
     @FXML private void onSend() { }
+
 }
